@@ -1,7 +1,7 @@
 
 # MidGen
 
-MidGen is a Perl based standard midi file reader/processor/generator. It includes Perl scripts and packages to create/read/write and process standard midi (smf) files. The output is typically a smf midi file saved in your current working directory from where the script gets executed. In addition, the console output displays a general song- and individual track-information overview. For more detailed result debug, individual event lists per track are saved as regular text files along with the smf.
+MidGen is a Perl based standard midi file reader/processor/generator. It includes Perl scripts and packages to create/read/write and process standard midi (smf) files. The output is typically a smf midi file saved in your current working directory from where the script gets executed. In addition, the console output displays general song- and track-information overview. For more detailed result debug, individual event lists per track are saved as regular text files along with the smf.
 
 <img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img0.png width="100%">
 
@@ -11,9 +11,9 @@ Timestamps and durations for functions (e.g. insert, sequencer, copy, etc.) are 
 
 Event data can be inserted and processed in various ways dependent on the event type.
 
-Note data can be inserted by using a so called micro-sequencer Edit::Seq(). This specific function allows to insert small sequences into the arrangement based on text string arguments.
+Note data can be inserted by using a so called micro-sequencer Edit::Seq(). This specific function allows to insert small event sequences into the arrangement based on text string arguments.
 
-Continous data such as controller, pitch bend, after touch, tempo changes, SysEx etc. can get inserted as event series allowing for smooth controller ramps and sweeps by using single commands.
+Continous data such as controller, pitch bend, after touch, tempo changes, SysEx etc. can get inserted as event series allowing for smooth controller sweeps by using single commands.
 
 usage:
 
@@ -24,5 +24,5 @@ or:
 
 If there is no file specified, the default project (Projects\Current.pl) is used.
 
-To get started quickly and to see how the output looks like, you can just run a smf midi file thru the program. MidGen will then just read, 
+To get started quickly and to see how the output looks like, you can just process a smf midi file thru the program.
 
