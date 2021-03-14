@@ -24,4 +24,4 @@ or:
 
 If there is no file specified, the default project (Projects\Current.pl) gets processed.
 
-To get started quickly and to see how the output looks like, you can just process a smf midi file thru the program or try one of the provided project examples.
+To get started quickly and to see how the output looks like, you can just process a smf midi file thru the program or try one of the provided project examples. MidGen was tested with ActiveState Perl, Strawberry Perl portable and various Linux/Ubuntu Perl versions.
