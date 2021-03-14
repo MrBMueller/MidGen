@@ -1,11 +1,17 @@
 
 # MidGen
 
-MidGen is a perl based standard midi file generator. It includes Perl scripts and packages to create/read/write and modify standard midi (smf) files. The output is typically a smf midi file saved in your current working directory from where the script is executed. In addition, the console output displays general song- and individual track-information for a quick smf overview. For more detailed result debug, individual event lists per track are saved as regular text files along with the smf.
+MidGen is a Perl based standard midi file reader/processor/generator. It includes Perl scripts and packages to create/read/write and process standard midi (smf) files. The output is typically a smf midi file saved in your current working directory from where the script gets executed. In addition, the console output displays a general song- and individual track-information overview. For more detailed result debug, individual event lists per track are saved as regular text files along with the smf.
 
-MidGen support all types of midi events including channel-, SysEx-, Meta- and Escape-messages. NoteOn-Off pairing is done internally while reading smf files. That means all internal operations refer only to Note- rather than Note-On/Off events unless they are inserted individually on purpose. Therefore each note is represented as a single event with a given duration and optionally a given note-off velocity.
+<img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img0.png width="100%">
 
-Timestamps for functions (e.g. insert, sequencer, copy, etc.) are typically provided as whole notes (floating point) to decouple the time representation from Timesignature. Internally all times are stored as ticks based on the smf PPQ setting. Therefore its important to define the required resolution in the beginning of a project.
+MidGen supports all types of midi events including channel-, SysEx-, Meta- and Escape-messages. NoteOn-Off pairing is done internally while reading smf files. That means all internal operations refer to Note- rather than Note-On/Off events unless they are inserted individually on purpose. Therefore each note is represented as a single event with a given duration and a optional note-off velocity.
+
+Timestamps and durations for functions (e.g. insert, sequencer, copy, etc.) are typically provided in whole notes as floating point values to decouple them from timesignatures. Internally all times are stored in ticks based on the smf PPQ setting. Therefore its important to define the required resolution in the beginning of a project.
+
+Event data can be inserted and processed in various ways dependent on the event type.
+
+Note data can be inserted by using a so called micro-sequencer Edit::Seq(). This specific function allows to insert small sequences into the arrangement based on text string arguments.
 
 Continous data such as controller, pitch bend, after touch, tempo changes, SysEx etc. can get inserted as event series allowing for smooth controller ramps and sweeps by using single commands.
 
@@ -18,5 +24,5 @@ or:
 
 If there is no file specified, the default project (Projects\Current.pl) is used.
 
-To get started quickly and to see how the output looks like, you can just run a smf midi file thru the program.
+To get started quickly and to see how the output looks like, you can just run a smf midi file thru the program. MidGen will then just read, 
 
