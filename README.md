@@ -1,7 +1,7 @@
 
 # MidGen
 
-MidGen is a Perl based standard midi file reader/processor/generator. It includes Perl scripts and packages to create/read/write and process standard midi (smf) files. The output is typically a smf midi file saved in your current working directory from where the script gets executed. In addition, the console output displays general song- and track-information overview. For more detailed result debug, individual event lists per track are saved as regular text files along with the smf.
+MidGen is a Perl based standard midi file reader/processor/generator. It includes Perl scripts and packages to create/read/write and process standard midi (smf) files. The output is typically a smf midi file saved in your current working directory from where the script gets executed. In addition, the console output provides an overview and displays general song- and track-information. For more detailed result debug, individual event lists per track are saved as regular text files along with the smf.
 
 <img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img0.png width="100%">
 
@@ -22,7 +22,6 @@ or:
 
     perl MidGen.pl <project.pl>
 
-If there is no file specified, the default project (Projects\Current.pl) is used.
+If there is no file specified, the default project (Projects\Current.pl) gets processed.
 
-To get started quickly and to see how the output looks like, you can just process a smf midi file thru the program.
-
+To get started quickly and to see how the output looks like, you can just process a smf midi file thru the program or try one of the provided project examples.
