@@ -28,6 +28,10 @@ To get started quickly and to see how the output looks like, you can just proces
 
 Example: Ballade por Adeline; source, translation and score output
 <img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img1.png width="100%">
+
+Compile the midi file:
 <img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img2.png width="100%">
+
+Output smf midi file in score representation:
 <img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img3.png width="100%">
 
