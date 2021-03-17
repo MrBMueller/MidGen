@@ -26,6 +26,7 @@ If there is no file specified, the default project (Projects\Current.pl) gets pr
 
 To get started quickly and to see how the output looks like, you can just process a smf midi file thru the program or try one of the provided project examples. MidGen was tested with ActiveState Perl, Strawberry Perl portable and various Linux/Ubuntu Perl versions.
 
+Example: Ballade por Adeline; source, translation and score output
 <img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img1.png width="100%">
 <img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img2.png width="100%">
 <img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img3.png width="100%">
