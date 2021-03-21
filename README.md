@@ -17,15 +17,19 @@ To compile the midi output file, just run:
 The output is typically a type 1 smf midi file saved in your current working directory from where the script gets executed. In addition, the console output provides an overview and displays general song- and track-information of your arrangement. For more detailed result debug, individual event lists per track are written as regular text files along with the smf output.
 
 **timestamps and durations**
+
 Timestamps and note- or continious controller-durations for functions such as (insert, micro-sequencer, copy, etc.) are typically provided in whole notes as floating point values to decouple them from timesignatures. Internally all times are stored in ticks based on the smf PPQ setting. Therefore its important to define the required resolution in the beginning of a project.
 
 **supported event types**
+
 MidGen supports all types of midi events including channel-, SysEx-, Meta- and Escape-messages. NoteOn-Off pairing is done internally while reading smf files. That means all internal operations refer to Note- rather than Note-On/Off events unless they are inserted individually on purpose. Therefore each note is represented as a single event with a given duration and a optional note-off velocity.
 
 **internal smf data structure**
+
 Internally the smf is nothing else than a multidimensional hash structure with integer key values across all hierachy levels. The top level key represents the track number (except "track" -1 which is used for smf specific information), the 2nd level key represent the eventtime in ticks based on the smf PPQ setting and the 3rd level key is the event ID representing the event order within a given tick. This allows simple access and iterations across all smf events for easy data manipulation.
 
 **micro sequencer**
+
 The micro-sequencer Edit::Seq() is a central and important function especially written for convenient note- and controller-data insertion. This function inserts a stream of notes and/or controller events into a specified track based on a given start-time, scale (e.g. chromatic, major, minor, etc.) and a base note (e.g. 60 - middle C). Essentally it reads a stream of `<duration>:<note>` pairs and inserts the provided notes at the actual timestamps with the given durations. The micro-sequencer keeps internally track of the timestamps and typically advances in time with each provided note-duration unless otherwise specified (e.g. for overlap notes or chords). 
 
 Durations are typically provided either as numbers (integer or floating point) or equations such as `1/4` or `1/4+1/8`. Durations can also start with an operator such as `+-*/` - in this case the previous duration will be modified. Dots for dotted notes are presented by tailing `+` signs. For instance a dotted quarter can be written either as `1/4+1/8` or alternatively as shortcut `1/4+`. Double or triple dotted notes are written with tailing `++` or `+++` signs respectively.
@@ -43,6 +47,7 @@ In addition, the micro-sequencer comes with several build-in loop and sub-sequen
 Since the sequencer keeps track of timestamps, durations and notes, you can preserve the previous duration/note and timestamp values when a sub-sequence get entered. In result, the sequencer can restore those values when returning to the main-sequence. Actually if the sequence only works with absolute note values it doesnt matter, but when the sequence runs with relative intervals it makes a difference.
 
 **usage**
+
 generic usage:
 
     perl MidGen.pl <smf.mid>
