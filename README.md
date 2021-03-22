@@ -1,5 +1,5 @@
 
-
+2021/03/22: added few more example projects including guitar strumming and style examples especially for playsmf
 
 # MidGen
 
