@@ -1,6 +1,4 @@
 
-2021/03/22: added few more example projects including guitar strumming and style examples especially for playsmf
-
 # MidGen
 
 MidGen is a Perl based standard midi file reader/processor/generator. It includes Perl modules and packages to create/read/write and process standard midi (smf) files based on Perl input scripts. Essentially this tool provides a framework, which is specifically designed for experiments with musical pattern, arpeggios, accompaniement styles, arrangements or entire scores. A build-in "micro sequencer" function translates text-based micro-sequences into smf midi data. Since everything runs in perl environment, you can take advantage from programming languages like using variables for micro-sequences, storing arrangement parts in sub-procedures, repeat sequence iterations with loops, etc. together with convenient smf input/output functionality. This approach allows writing music in traditional sequenced format in combination with algorithmic or procedural programming functionalities. In addition, there are many functions for SMF data manipulation implemented such as copy/paste/insert/transpose which are working either on track level or across the entire arrangement. Also you can include and merge additional external smf midi data into your arrangement so that for instance live played parts get merged with generated accompaniement pattern. Essentially there is no limit for creativity since its an open framework were you can easily add additional features, functions, procedures or other extensions with your own ideas.
@@ -32,9 +30,15 @@ Internally the smf is nothing else than a multidimensional hash structure with i
 
 The micro-sequencer Edit::Seq() is a central and important function especially written for convenient note- and controller-data insertion. This function inserts a stream of notes and/or controller events into a specified track based on a given start-time, scale (e.g. chromatic, major, minor, etc.) and a base note (e.g. 60 - middle C). Essentally it reads a stream of `<duration>:<note>` pairs and inserts the provided notes at the actual timestamps with the given durations. The micro-sequencer keeps internally track of the timestamps and typically advances in time with each provided note-duration unless otherwise specified (e.g. for overlap notes or chords). 
 
+Example - simple micro sequence:
+<img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/Example1.png width="100%">
+
 Durations are typically provided either as numbers (integer or floating point) or equations such as `1/4` or `1/4+1/8`. Durations can also start with an operator such as `+-*/` - in this case the previous duration will be modified. Dots for dotted notes are presented by tailing `+` signs. For instance a dotted quarter can be written either as `1/4+1/8` or alternatively as shortcut `1/4+`. Double or triple dotted notes are written with tailing `++` or `+++` signs respectively.
 
-Pauses are simply specified with the `%` character.,
+<img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/Example3.png width="100%">
+
+Pauses are simply specified with the `%` character.
+<img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/Example2.png width="100%">
 
 Notes are typically provided as numerical values rather than traditional musical symbols. This decouples them from scales and tonal systems and keeps the flexibility for additional arithmetic operations. They can get specified either in absolut- or in relative (interval) values by preceding `^` (up) or `v` (down) symbols. To repeat a note with the same pitch, you can just use the `.` (dot) symbol.
 
