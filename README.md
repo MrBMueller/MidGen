@@ -50,6 +50,10 @@ In addition, the micro-sequencer comes with several build-in loop and sub-sequen
 
 Since the sequencer keeps track of timestamps, durations and notes, you can preserve the previous duration/note and timestamp values when a sub-sequence get entered. In result, the sequencer can restore those values when returning to the main-sequence. Actually if the sequence only works with absolute note values it doesnt matter, but when the sequence runs with relative intervals it makes a difference.
 
+**note attribute data**
+Each note- or pause-event of the micro sequencer supports additional (optional) attributes such as on/off velocity values and/or attached controller data series. This way you can easily attach additional articulation attributes to each individual note in alignment with note-on and duration timestamps. Attributes are either single events inserted at the current timestamp in sequence or continous event series inserted along the given note duration. Attributes can be any kind of controller, aftertouch, pitchbend, sysex or tempo events.
+<img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/Example4.png width="100%">
+
 **usage**
 
 generic usage:
