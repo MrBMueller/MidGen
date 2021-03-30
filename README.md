@@ -1,4 +1,5 @@
 
+
 # MidGen
 
 MidGen is a Perl based standard midi file reader/processor/generator. It includes Perl modules and packages to create/read/write and process standard midi (smf) files based on Perl input scripts. Essentially this tool provides a framework, which is specifically designed for experiments with musical pattern, arpeggios, accompaniement styles, arrangements or entire scores. A build-in "micro sequencer" function translates text-based micro-sequences into smf midi data. Since everything runs in perl environment, you can take advantage from programming languages like using variables for micro-sequences, storing arrangement parts in sub-procedures, repeat sequence iterations with loops, etc. together with convenient smf input/output functionality. This approach allows writing music in traditional sequenced format in combination with algorithmic or procedural programming functionalities. In addition, there are many functions for SMF data manipulation implemented such as copy/paste/insert/transpose which are working either on track level or across the entire arrangement. Also you can include and merge additional external smf midi data into your arrangement so that for instance live played parts get merged with generated accompaniement pattern. Essentially there is no limit for creativity since its an open framework were you can easily add additional features, functions, procedures or other extensions with your own ideas.
@@ -51,8 +52,12 @@ In addition, the micro-sequencer comes with several build-in loop and sub-sequen
 Since the sequencer keeps track of timestamps, durations and notes, you can preserve the previous duration/note and timestamp values when a sub-sequence get entered. In result, the sequencer can restore those values when returning to the main-sequence. Actually if the sequence only works with absolute note values it doesnt matter, but when the sequence runs with relative intervals it makes a difference.
 
 **note attribute data**
+
 Each note- or pause-event of the micro sequencer supports additional (optional) attributes such as on/off velocity values and/or attached controller data series. This way you can easily attach additional articulation attributes to each individual note in alignment with note-on and duration timestamps. Attributes are either single events inserted at the current timestamp in sequence or continous event series inserted along the given note duration. Attributes can be any kind of controller, aftertouch, pitchbend, sysex or tempo events.
 <img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/Example4.png width="100%">
+
+supported sweep types: fixed value, linear, sinus, half sin return, half sin sweep, sigmoid
+<img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/Example5.png width="100%">
 
 **usage**
 
