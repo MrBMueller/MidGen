@@ -54,7 +54,7 @@ The sequence above is mostly self explanatory.
 Event-durations are typically provided in whole note units either as numbers in integer or floating point values or as equations such as `1/4` or `1/4+1/8`, `1/4+1/8+1/16` etc. To shortcut dotted note equations, you can just put tailing `+` signs after the duration value. For instance a dotted quarter can be written either as `1/4+1/8` or alternatively as `1/4+`. Double or triple dotted notes are written respectively with tailing `++` or `+++` signs. Similarly you can shorten a note by its half length with tailing `-` signs.
 
 **note events**
-Note eventy are typically provided as numerical values rather than traditional musical symbols. This decouples them from scales and tonal systems and keeps the flexibility for additional arithmetic operations. They can get specified either in absolut- or in relative (interval) values by preceding `^` (up) or `v` (down) symbols. To repeat a note with the same pitch, you can just use the `.` (dot) symbol.
+Note events are typically provided as numerical values rather than traditional musical symbols. This decouples them from scales and tonal systems and keeps the flexibility for additional arithmetic operations. They can get specified either in absolut- or in relative (interval) values by preceding `^` (up) or `v` (down) symbols. To repeat a note with the same pitch, you can just use the `.` (dot) symbol.
 
 Example - Two consecutive micro sequences with marker events and bar separators:
 <img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/Example1.png width="100%">
@@ -93,3 +93,21 @@ To get started quickly and to see how the output looks like, you can just proces
 
 Example: read/write a smf midi file:
 <img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img0.png width="100%">
+
+**tutorial pages**
+<img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/Tut_p3.PNG width="100%">
+<img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/Tut_p4.PNG width="100%">
+<img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/Tut_p5.PNG width="100%">
+<img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/Tut_p6.PNG width="100%">
+<img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/Tut_p7.PNG width="100%">
+<img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/Tut_p8.PNG width="100%">
+<img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/Tut_p9.PNG width="100%">
+<img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/Tut_p10.PNG width="100%">
+<img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/Tut_p11.PNG width="100%">
+<img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/Tut_p12.PNG width="100%">
+<img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/Tut_p13.PNG width="100%">
+<img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/Tut_p14.PNG width="100%">
+<img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/Tut_p15.PNG width="100%">
+<img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/Tut_p16.PNG width="100%">
+<img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/Tut_p17.PNG width="100%">
+<img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/Tut_p18.PNG width="100%">
