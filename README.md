@@ -33,7 +33,7 @@ MidGen supports all types of midi events including channel-, SysEx-, Meta- and E
 
 ## micro sequencer
 
-The micro-sequencer is a central and important function especially written for convenient note- , controller- and other data insertions. Essentially it inserts a sequence of notes and/or controller/meta/sysex events into a specified track, based on a given start-time, scale (e.g. chromatic, major, minor, etc.) and base note (e.g. 60 - middle C). The sequence is provided as a consecutive string of `<duration>:<data>` pairs representing duration timestamps and associated event data. The micro-sequencer keeps internally track of timestamps and note-pitches and typically advances in time with each provided duration unless otherwise specified (e.g. for overlap notes or chords). In addition, the sequencer returns the total duration of the provided micro-sequence in whole note units. This allows the caller thread keeping track about the total timestamp if you simply sum up all micro-sequence durations in case they belong logically together. The micro sequencer function is called from Edit package as follow:
+The micro-sequencer is a central and important function especially written for convenient note- , controller- and other data insertions. Essentially it inserts a sequence of notes and/or controller/meta/sysex events into a specified track, based on a given start-time, scale (e.g. chromatic, major, minor, etc.) and base note (e.g. 60 - middle C). The sequence is provided as a consecutive white space separated string of `<duration>:<data>` pairs representing duration timestamps and associated event data. The micro-sequencer keeps internally track of timestamps, note-pitches and other data and typically advances in time with each provided duration value unless otherwise specified (e.g. for overlap notes or chords). In addition, the sequencer returns the total duration of the provided micro-sequence in whole note units. This allows the caller thread keeping track about the total timestamp if you simply sum up all micro-sequence durations in case they belong logically together. The micro sequencer function is called from Edit package as follow:
 
     Edit::Seq(<smf-hash-pointer>, <track>, <start-time>, <base-note>, <scale>, <sequence>);
 
@@ -65,12 +65,18 @@ In order to keep the sequence more structured and readable, it is possible to in
 
 
 ### note events
-Note events are typically provided as numerical values rather than traditional musical symbols. This decouples them from scales and tonal systems and keeps the flexibility for additional arithmetic operations. They can get specified either in absolut- or in relative (interval) values by preceding `^` (up) or `v` (down) symbols. To repeat a note with the same pitch, you can just use the `.` (dot) symbol.
+Note events are typically provided as numerical values rather than traditional musical symbols. This decouples them from scales and tonal systems and keeps the flexibility for additional arithmetic operations. They can get specified either in absolut- or relative (interval) values by preceding `^` (up) or `v` (down) symbols. Absolute values can be either positive or negative in case they refer to notes below the given basenote.
 
-Example - Two consecutive micro sequences with marker events and bar separators:
+Example - Two consecutive micro sequences with additional marker `M<text>` events and bar separators:
 <img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/Example1.png width="100%">
 
 The example above just demonstrates how to concatenate multiple micro sequences using a global timestamp variable.
+
+#### relative note events
+Since the micro sequencer keeps internally track about note values, it is possible to use relative note intervals in addition to absolute ones. Relative notes are addressed by preceding up `^` or down `v` symbols in front of the note values. If there is no number specified, the sequencer assumes just one relative note step.
+
+<img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img7.png width="100%">
+
 
 #### flat (b) and sharp (#) character signs
 Note values can be increased or decresed in semitones by putting either flat and/or sharp character signs after the note value. Traditional music puts them in front of the note, but here it is required to put them after the note value as additional attributes. The sequencer allows having multiple consecutive and mixed signs by simply summing up all flats and sharps to get the final note value.
@@ -83,6 +89,9 @@ rests and pauses are simply written with the `%` character.
 <img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/Example2.png width="100%">
 
 ### sub-sequences, repetition and looping
+
+To repeat a event, you can just use the `.` (dot) symbol.
+
 In addition, the micro-sequencer comes with several build-in loop and sub-sequence functions for sequence repetitions. Essentially you can enclose sequences or parts of sequences within braces `n{<sub-sequence>}` and put a repetition number `n` in front of them. If no repetition number is given, the sequencer assumes one insertion w/o repetition, otherwise the sequencer will insert the enclosed sub-sequence n times. Nested repetitions are allowed as well - for example: `4{ 2{ 0 1 2 3 } 4 5 }`. Finally, different types of braces have different meanings:
 
  - curly `n{<sub-sequence>}` - regular repeat
