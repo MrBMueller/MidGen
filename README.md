@@ -56,7 +56,7 @@ Event-durations are typically provided in whole note units either as integer or 
 <img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img4.png width="100%">
 
 #### duration alignment
-To avoid complex arithmetic equations and to keep sequences more readable, it is possible to align event durations to a given timestamp grid boundary by using the alignment operator `|` in front of the value. This advices the sequencer to proceed in time until the next grid boundary timestamp is reached. So in the example above, the `|1/1:%` event will simply insert a rest in alignment with the next whole note timestamp value. In this case it proceeds to the next bar since the time signature is 4/4 (= whole note boundary).
+To avoid complex arithmetic equations and to keep sequences more readable, it is possible to align event durations to given timestamp grid boundaries by using the alignment operator `|` in front of the value. This advices the sequencer to proceed in time until the next grid boundary timestamp is reached. So in the example above, the `|1/1:%` event will simply insert a rest in alignment with the next whole note timestamp value. In this case it proceeds to the next bar since the time signature is 4/4 (whole note grid boundary).
 
 #### visual beat/bar separator `|`
 In order to keep the sequence more structured and readable, it is possible to insert additional `|` characters to visualize bar, beat or other separations. Semantically they dont have any meaning and are just ignored like comments or remarks by the sequencer as long as they stay in clear separation from events.
