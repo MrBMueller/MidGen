@@ -51,13 +51,20 @@ Example - simple micro sequence:
 The sequence above is mostly self explanatory.
 
 **durations**
-Event-durations are typically provided in whole note units either as numbers in integer or floating point values or as equations such as `1/4` or `1/4+1/8`, `1/4+1/8+1/16` etc. To shortcut dotted note equations, you can just put tailing `+` signs after the duration value. For instance a dotted quarter can be written either as `1/4+1/8` or alternatively as `1/4+`. Double or triple dotted notes are written respectively with tailing `++` or `+++` signs. Similarly you can shorten a note by its half length with tailing `-` signs.
+Event-durations are typically provided in whole note units either as integer or floating point numbers or as equations such as `1/4` or `1/4+1/8`, `1/4+1/8+1/16` etc. To shortcut dotted note equations, you can just put tailing `+` signs after the duration value. For instance a dotted quarter can be written either as `1/4+1/8` or alternatively as `1/4+`. Double or triple dotted notes are written respectively with tailing `++` or `+++` signs. Similarly you can shorten a note by its half length with tailing `-` signs. The example below shows few different variants of duration timestamps.
+
+<img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img4.png width="100%">
+
+**duration alignment**
+To avoid complex arithmetic equations and to keep sequences more readable, it is possible to align event durations to a given timestamp grid boundary by using the alignment operator `|` in front of the value. This advices the sequencer to proceed in time until the next grid boundary timestamp is reached. So in the example above, the `|1/1:%` event will simply insert a rest in alignment with the next whole note timestamp value. In this case it proceeds to the next bar since the time signature is 4/4 (= whole note boundary).
 
 **note events**
 Note events are typically provided as numerical values rather than traditional musical symbols. This decouples them from scales and tonal systems and keeps the flexibility for additional arithmetic operations. They can get specified either in absolut- or in relative (interval) values by preceding `^` (up) or `v` (down) symbols. To repeat a note with the same pitch, you can just use the `.` (dot) symbol.
 
 Example - Two consecutive micro sequences with marker events and bar separators:
 <img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/Example1.png width="100%">
+
+
 
 The example above just demonstrates how to concatenate multiple micro sequences using a global timestamp variable.
 
