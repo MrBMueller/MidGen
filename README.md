@@ -50,29 +50,39 @@ Example - simple micro sequence:
 
 The sequence above is mostly self explanatory.
 
-**durations**
+### durations
 Event-durations are typically provided in whole note units either as integer or floating point numbers or as equations such as `1/4` or `1/4+1/8`, `1/4+1/8+1/16` etc. To shortcut dotted note equations, you can just put tailing `+` signs after the duration value. For instance a dotted quarter can be written either as `1/4+1/8` or alternatively as `1/4+`. Double or triple dotted notes are written respectively with tailing `++` or `+++` signs. Similarly you can shorten a note by its half length with tailing `-` signs. The example below shows few different variants of duration timestamps.
 
 <img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img4.png width="100%">
 
-**duration alignment**
+#### duration alignment
 To avoid complex arithmetic equations and to keep sequences more readable, it is possible to align event durations to a given timestamp grid boundary by using the alignment operator `|` in front of the value. This advices the sequencer to proceed in time until the next grid boundary timestamp is reached. So in the example above, the `|1/1:%` event will simply insert a rest in alignment with the next whole note timestamp value. In this case it proceeds to the next bar since the time signature is 4/4 (= whole note boundary).
 
-**note events**
+#### visual beat/bar separator `|`
+In order to keep the sequence more structured and readable, it is possible to insert additional `|` characters to visualize bar, beat or other separations. Semantically they dont have any meaning and are just ignored like comments or remarks by the sequencer as long as they stay in clear separation from events.
+
+<img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img5.png width="100%">
+
+
+### note events
 Note events are typically provided as numerical values rather than traditional musical symbols. This decouples them from scales and tonal systems and keeps the flexibility for additional arithmetic operations. They can get specified either in absolut- or in relative (interval) values by preceding `^` (up) or `v` (down) symbols. To repeat a note with the same pitch, you can just use the `.` (dot) symbol.
 
 Example - Two consecutive micro sequences with marker events and bar separators:
 <img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/Example1.png width="100%">
 
-
-
 The example above just demonstrates how to concatenate multiple micro sequences using a global timestamp variable.
 
-**rests**
+#### flat (b) and sharp (#) character signs
+Note values can be increased or decresed in semitones by putting either flat and/or sharp character signs after the note value. Traditional music puts them in front of the note, but here it is required to put them after the note value as additional attributes. The sequencer allows having multiple consecutive and mixed signs by simply summing up all flats and sharps to get the final note value.
+
+Example - C major with few additional flats and sharps:
+<img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img6.png width="100%">
+
+#### rests
 rests and pauses are simply written with the `%` character.
 <img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/Example2.png width="100%">
 
-**looping**
+### sub-sequences, repetition and looping
 In addition, the micro-sequencer comes with several build-in loop and sub-sequence functions for sequence repetitions. Essentially you can enclose sequences or parts of sequences within braces `n{<sub-sequence>}` and put a repetition number `n` in front of them. If no repetition number is given, the sequencer assumes one insertion w/o repetition, otherwise the sequencer will insert the enclosed sub-sequence n times. Nested repetitions are allowed as well - for example: `4{ 2{ 0 1 2 3 } 4 5 }`. Finally, different types of braces have different meanings:
 
  - curly `n{<sub-sequence>}` - regular repeat
