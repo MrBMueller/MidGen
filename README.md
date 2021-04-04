@@ -78,8 +78,8 @@ Since the micro sequencer keeps internally track about note values, it is possib
 <img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img7.png width="100%">
 
 
-#### flat (b) and sharp (#) character signs
-Note values can be increased or decresed in semitones by putting either flat and/or sharp character signs after the note value. Traditional music puts them in front of the note, but here it is required to put them after the note value as additional attributes. The sequencer allows having multiple consecutive and mixed signs by simply summing up all flats and sharps to get the final note value.
+#### flat (b) and sharp (#) symbols
+Note values can be increased or decreased in semitones by putting either flat and/or sharp symbols after the note value. Traditional music puts them in front of the note, but here it is required to put them after the note value as additional attributes. The sequencer allows having multiple consecutive and mixed symbols by simply summing up all flats and sharps to get the final note value.
 
 Example - C major with few additional flats and sharps:
 <img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img6.png width="100%">
