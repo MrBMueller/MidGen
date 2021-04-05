@@ -42,7 +42,7 @@ Actually there are much more arguments available, but those are the most importa
  - `<smf-hash-pointer>` is simply a pointer into your smf midi data structure where the sequence get inserted. Typically you'll use the standard smf output structure `%main::out`, but in case you work on multiple smf structures in parallel, you need to specify which one to use.
  - `<Track>` is almost self-explanatory. It simply specifies the tracknumber where the sequence goes into. Track numbers start from zero.
  - `<start-time>` is basically the timestamp in whole note units where the sequence gets inserted.
- - `<base-note>` determines the reference note `0` and the sequencer works relative from there. In conjunction with the scale it provides finally the sequence key.
+ - `<base-note>` determines the sequence reference note `0` as the sequencer works relative from there. In conjunction with the scale it provides finally the sequence key.
  - `<scale>` 0:chromatic (typically used in combination with base-note zero to access regular midi note numbers - e.g. for percussion sequences); 2:major; 3:minor
  - `<sequence>` is a text based argument representing the actual sequence to insert
 
@@ -122,6 +122,14 @@ The 3rd scenario demonstrates how the sequencer goes back in time before the not
 
 The 4th scenario demonstrates the combination of both previous scenarios. The sequencer goes back in time before the event gets inserted, advances in time with the event and finally goes back in time again after the event insertion. In result, the note and the return marker appear earlier in time than the entry marker. Effectively the sequencer is running backward and returning a negative sequence length in this case.
 
+Finally timestamp directives can be used to write overlap notes, chords or sub-sequence overhangs at the beginning or ending of an sequence. The example below shows a simple chord triad with 3 stacked notes. In this case only the last note get advanced in time while the 1st and 2nd notes doesnt advance. If there is no timestamp value provided, the given timestamp directive is still valid and the sequencer will not advance after the event insertion.
+<img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img11.png width="100%">
+
+**micro-sequence overlaps (overhang)**
+Another example below shows how to setup sequence overlaps or overhangs using timestamp directives. In some cases it is required having extra events or overlap events either before the sequence actually starts or after the sequence has been finished. This can easily get achived by timestamp directives going back in time before the sequence starts or after the sequence has been finished. The example below shows two concatenated micro-sequences with additional overhang events on each sequence side.
+
+<img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img12.png width="100%">
+
 **additional note attribute data**
 Each note- or pause-event of the micro sequencer supports additional (optional) attributes such as on/off velocity values and/or attached controller data series. This way you can easily attach additional articulation attributes to each individual note in alignment with note-on and duration timestamps. Attributes are either single events inserted at the current timestamp in sequence or continous event series inserted along the given note duration. Attributes can be any kind of controller, aftertouch, pitchbend, sysex or tempo events.
 <img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/Example4.png width="100%">
@@ -159,4 +167,3 @@ Example: read/write a smf midi file:
 <img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/Tut_p16.PNG width="100%">
 <img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/Tut_p17.PNG width="100%">
 <img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/Tut_p18.PNG width="100%">
-![image](https://user-images.githubusercontent.com/43709526/113579709-95b74a00-961c-11eb-9127-f3e68a02cb07.png)
