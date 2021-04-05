@@ -159,3 +159,4 @@ Example: read/write a smf midi file:
 <img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/Tut_p16.PNG width="100%">
 <img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/Tut_p17.PNG width="100%">
 <img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/Tut_p18.PNG width="100%">
+![image](https://user-images.githubusercontent.com/43709526/113579709-95b74a00-961c-11eb-9127-f3e68a02cb07.png)
