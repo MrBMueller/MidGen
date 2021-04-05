@@ -33,7 +33,7 @@ MidGen supports all types of midi events including channel-, SysEx-, Meta- and E
 
 ## micro sequencer
 
-The micro-sequencer is a central and important function especially written for convenient note- , controller- and other data insertions. Essentially it inserts a sequence of notes and/or controller/meta/sysex events into a specified track, based on a given start-time, scale (e.g. chromatic, major, minor, etc.) and base note (e.g. 60 - middle C). The sequence is provided as a consecutive white space separated string of `<duration>:<data>` pairs representing duration timestamps and associated event data. The micro-sequencer keeps internally track of timestamps, note-pitches and other data and typically advances in time with each provided duration value unless otherwise specified (e.g. for overlap notes or chords). In addition, the sequencer returns the total duration of the provided micro-sequence in whole note units. This allows the caller thread keeping track about the total timestamp if you simply sum up all micro-sequence durations in case they belong logically together. The micro sequencer function is called from Edit package as follow:
+The micro-sequencer is a central and important function especially written for convenient note- , controller- and other data insertions. Essentially it inserts a sequence of notes and/or controller/meta/sysex events into a specified track, based on a given start-time, scale (e.g. chromatic, major, minor, etc.) and base note (e.g. 60 - middle C). The sequence is provided as a consecutive, white space separated list of `<duration>:<data>` pairs representing duration timestamps with associated event data. The micro-sequencer keeps internally track of timestamps, note-pitches and other data and typically advances in time with each provided duration value unless otherwise specified (e.g. for overlap notes or chords). In addition, the sequencer returns the total duration of the provided micro-sequence in whole note units. This allows the caller thread keeping track about the total timestamp if you simply sum up all micro-sequence durations in case they belong logically together. The micro sequencer function is called from Edit package as follow:
 
     Edit::Seq(<smf-hash-pointer>, <track>, <start-time>, <base-note>, <scale>, <sequence>);
 
@@ -42,7 +42,8 @@ Actually there are much more arguments available, but those are the most importa
  - `<smf-hash-pointer>` is simply a pointer into your smf midi data structure where the sequence get inserted. Typically you'll use the standard smf output structure `%main::out`, but in case you work on multiple smf structures in parallel, you need to specify which one to use.
  - `<Track>` is almost self-explanatory. It simply specifies the tracknumber where the sequence goes into. Track numbers start from zero.
  - `<start-time>` is basically the timestamp in whole note units where the sequence gets inserted.
- - `<base-note>` is the reference note since the sequence typically works relative from there. In conjunction with the scale it provides finally the sequence key.
+ - `<base-note>` determines the reference note `0` and the sequencer works relative from there. In conjunction with the scale it provides finally the sequence key.
+ - `<scale>` 0:chromatic (typically used in combination with base-note zero to access regular midi note numbers - e.g. for percussion sequences); 2:major; 3:minor
  - `<sequence>` is a text based argument representing the actual sequence to insert
 
 Example - simple micro sequence:
@@ -54,6 +55,7 @@ The sequence above is mostly self explanatory.
 Event-durations are typically provided in whole note units either as integer or floating point numbers or as equations such as `1/4` or `1/4+1/8`, `1/4+1/8+1/16` etc. To shortcut dotted note equations, you can just put tailing `+` signs after the duration value. For instance a dotted quarter can be written either as `1/4+1/8` or alternatively as `1/4+`. Double or triple dotted notes are written respectively with tailing `++` or `+++` signs. Similarly you can shorten a note by its half length with tailing `-` signs. The example below shows few different variants of duration timestamps.
 
 <img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img4.png width="100%">
+If the timestamp is omitted, the sequencer automatically applies the latest valid timestamp value.
 
 #### duration alignment
 To avoid complex arithmetic equations and to keep sequences more readable, it is possible to align event durations to given timestamp grid boundaries by using the alignment operator `|` in front of the value. This advices the sequencer to proceed in time until the next grid boundary timestamp is reached. So in the example above, the `|1/1:%` event will simply insert a rest in alignment with the next whole note timestamp value. In this case it proceeds to the next bar since the time signature is 4/4 (whole note grid boundary).
@@ -73,34 +75,54 @@ Example - Two consecutive micro sequences with additional marker `M<text>` event
 The example above just demonstrates how to concatenate multiple micro sequences using a global timestamp variable.
 
 #### relative note events
-Since the micro sequencer keeps internally track about note values, it is possible to use relative note intervals in addition to absolute ones. Relative notes are addressed by preceding up `^` or down `v` symbols in front of the note values. If there is no number specified, the sequencer assumes just one relative note step.
+Since the micro sequencer keeps internally track about note values, it is possible to use relative note intervals in addition to absolute ones. Relative notes are determined by preceding up `^` or down `v` symbols in front of the note values. If there is no note number specified, the sequencer assumes just one relative note step.
 
 <img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img7.png width="100%">
 
 
 #### flat (b) and sharp (#) symbols
-Note values can be increased or decreased in semitones by putting either flat and/or sharp symbols after the note value. Traditional music puts them in front of the note, but here it is required to put them after the note value as additional attributes. The sequencer allows having multiple consecutive and mixed symbols by simply summing up all flats and sharps to get the final note value.
+Note values can be increased or decreased in semitones by putting either flat and/or sharp symbols after the note value. Traditional music puts them in front of the note, but here it is required to put them after the note value as additional attributes. The sequencer allows having multiple consecutive and/or mixed symbols by simply summing up all flats and sharps to get the final value.
 
 Example - C major with few additional flats and sharps:
 <img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img6.png width="100%">
 
 #### rests
-rests and pauses are simply written with the `%` character.
+rests and pauses are simply written by the `%` character.
 <img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/Example2.png width="100%">
 
-### sub-sequences, repetition and looping
+### sub-sequences, repetitions and loops
 
-To repeat a event, you can just use the `.` (dot) symbol.
+To repeat a single event, you can just use the `.` (dot) symbol.
 
-In addition, the micro-sequencer comes with several build-in loop and sub-sequence functions for sequence repetitions. Essentially you can enclose sequences or parts of sequences within braces `n{<sub-sequence>}` and put a repetition number `n` in front of them. If no repetition number is given, the sequencer assumes one insertion w/o repetition, otherwise the sequencer will insert the enclosed sub-sequence n times. Nested repetitions are allowed as well - for example: `4{ 2{ 0 1 2 3 } 4 5 }`. Finally, different types of braces have different meanings:
+In addition, the micro-sequencer comes with several build-in loop and sub-sequence functions for sequence repetitions. Essentially you can enclose sequences or parts of sequences within braces `n{<sub-sequence>}` and put a repetition number `n` in front of them. If no repetition number is given, the sequencer assumes one insertion w/o repetition, otherwise the sequencer will insert the enclosed sub-sequence(s) n times. Since the sequencer allows the insertion of recursively nested sub-sequences, repetition pattern can quickly get large and complex by just a few instructions. The example below shows a small input sequence with two nested sub-sequences.
+
+<img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img9.png width="100%">
+
+
+Finally, different types of braces have different meanings:
 
  - curly `n{<sub-sequence>}` - regular repeat
- - regular `n(<sub-sequence>)` - preserve/restore duration and note values, but advance in time
- - square `n[<sub-sequence>]` - preserve/restore duration/note and timestamp values (doesnt advance in time)
+ - regular `n(<sub-sequence>)` - preserve/restore duration and note values when a sub-sequence gets entered, but advance in time
+ - square `n[<sub-sequence>]` - preserve/restore duration/note and timestamp values when a sub-sequence gets entered (doesnt advance in time)
 
 Since the sequencer keeps track of timestamps, durations and notes, you can preserve the previous duration/note and timestamp values when a sub-sequence get entered. In result, the sequencer can restore those values when returning to the main-sequence. Actually if the sequence only works with absolute note values it doesnt matter, but when the sequence runs with relative intervals it makes a difference.
 
-**note attribute data**
+#### additional timestamp directives
+Usually the sequencer takes care about timestamp values and advances in time with each provided event duration. This function is typically usefull for monotonic lines like lead melodies, bass lines, etc. with non-overlapping notes. However in many cases you need note or event overlaps such as in chords or many other situations. Therefore the sequencer provides additional timestamp directives by having additional `<` symbols in front and/or after the given timestamp value.
+
+<img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img10.png width="100%">
+
+The examples above show 4 different scenarios:
+
+The 1st one is a regular insert of a quarter note where the sequencer advances in time with the event duration. Therefore the total sequence length is effectively one quarter note.
+
+The 2nd scenario shows that the return marker merges with the entry marker because the sequencer doesnt advance in time when the quarter note gets inserted. In result, the total sequence length is effectively zero although a note was inserted.
+
+The 3rd scenario demonstrates how the sequencer goes back in time before the note gets inserted. Therefore the note appears earlier in time as the sequence entry point. Since the sequencer still advances in time with the inserted event, in result the return marker merges again with the entry marker and the total effective sequence length is zero.
+
+The 4th scenario demonstrates the combination of both previous scenarios. The sequencer goes back in time before the event gets inserted, advances in time with the event and finally goes back in time again after the event insertion. In result, the note and the return marker appear earlier in time than the entry marker. Effectively the sequencer is running backward and returning a negative sequence length in this case.
+
+**additional note attribute data**
 Each note- or pause-event of the micro sequencer supports additional (optional) attributes such as on/off velocity values and/or attached controller data series. This way you can easily attach additional articulation attributes to each individual note in alignment with note-on and duration timestamps. Attributes are either single events inserted at the current timestamp in sequence or continous event series inserted along the given note duration. Attributes can be any kind of controller, aftertouch, pitchbend, sysex or tempo events.
 <img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/Example4.png width="100%">
 
