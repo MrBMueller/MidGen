@@ -1,13 +1,13 @@
-
+[TOC]
 
 # MidGen
 
-MidGen is a Perl based standard midi file reader/processor/generator. It includes Perl modules and packages to create/read/write and process standard midi (smf) files based on Perl input scripts. Essentially this tool provides a framework, which is specifically designed for experiments with musical pattern, arpeggios, accompaniement styles, arrangements or entire scores. A build-in "micro sequencer" function translates text-based micro-sequences into smf midi data. Since everything runs in perl environment, you can take advantage from programming languages like using variables for micro-sequences, storing arrangement parts in sub-procedures, repeat sequence iterations with loops, etc. together with convenient smf input/output functionality. This approach allows writing music in traditional sequenced format in combination with algorithmic or procedural programming functionalities. In addition, there are many functions for SMF data manipulation implemented such as copy/paste/insert/transpose which are working either on track level or across the entire arrangement. Also you can include and merge additional external smf midi data into your arrangement so that for instance live played parts get merged with generated accompaniement pattern. Essentially there is no limit for creativity since its an open framework were you can easily add additional features, functions, procedures or other extensions with your own ideas.
+MidGen is a Perl based standard midi file reader/processor/generator. It includes Perl modules and packages to create/read/write and process standard midi (smf) files based on Perl input scripts. Essentially this tool provides a framework, which is specifically designed for experiments with musical pattern, arpeggios, accompaniment styles, arrangements or entire scores. A build-in "micro sequencer" function translates text-based micro-sequences into smf midi data. Since everything runs in perl environment, you can take advantage from programming languages like using variables for micro-sequences, storing arrangement parts in sub-procedures, repeat sequence iterations with loops, etc. together with convenient smf input/output functionality. This approach allows writing music in traditional sequenced format in combination with algorithmic or procedural programming functionalities. In addition, there are many functions for SMF data manipulation implemented such as copy/paste/insert/transpose which are working either on track level or across the entire arrangement. Also you can include and merge additional external smf midi data into your arrangement so that for instance live played parts get merged with generated accompaniment pattern. Essentially there is no limit for creativity since its an open framework were you can easily add additional features, functions, procedures or other extensions with your own ideas.
 
 Example smf output arrangement in score representation:
 <img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img3.png width="100%">
 
-The score was entirely generated from the example sourcecode below using micro sequences:
+The score was entirely generated from the example source code below using micro sequences:
 <img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img1.png width="100%">
 
 To compile the midi output file, just run:
@@ -15,9 +15,11 @@ To compile the midi output file, just run:
 
 The output is typically a type 1 smf midi file saved in your current working directory from where the script gets executed. In addition, the console output provides an overview and displays general song- and track-information of your arrangement. For more detailed result debug, individual event lists per track are written as regular text files along with the smf output.
 
+------
+
 ## internal smf data structure
 
-Internally the smf is nothing else than a multidimensional hash structure with integer key values across all hierachy levels. The top level key represents the track number (except "track" -1 which is used for smf specific information), the 2nd level key represent the eventtime in ticks based on the smf PPQ setting and the 3rd level key is the event ID representing the event order within a given tick. This allows simple access and iterations across all smf events for easy data manipulation.
+Internally the smf is nothing else than a multidimensional hash structure with integer key values across all hierarchy levels. The top level key represents the track number (except "track" -1 which is used for smf specific information), the 2nd level key represent the eventtime in ticks based on the smf PPQ setting and the 3rd level key is the event ID representing the event order within a given tick. This allows simple access and iterations across all smf events for easy data manipulation.
 
 Reading a midi file is as simple as:
 
@@ -25,11 +27,13 @@ Reading a midi file is as simple as:
 
 **timestamps and durations**
 
-Timestamps and note- or continious controller-durations for functions such as (insert, micro-sequencer, copy, etc.) are typically provided in whole notes as floating point values to decouple them from timesignatures. Internally all times are stored in ticks based on the smf PPQ setting. Therefore its important to define the required resolution in the beginning of a project.
+Timestamps and note- or continuous controller-durations for functions such as (insert, micro-sequencer, copy, etc.) are typically provided in whole notes as floating point values to decouple them from timesignatures. Internally all times are stored in ticks based on the smf PPQ setting. Therefore its important to define the required resolution in the beginning of a project.
 
 **supported event types**
 
 MidGen supports all types of midi events including channel-, SysEx-, Meta- and Escape-messages. NoteOn-Off pairing is done internally while reading smf files. That means all internal operations refer to Note- rather than Note-On/Off events unless they are inserted individually on purpose. Therefore each note is represented as a single event with a given duration and a optional note-off velocity.
+
+------
 
 ## micro sequencer
 
@@ -134,7 +138,9 @@ Another example below shows how to setup sequence overlaps or overhangs using ti
 Each note- or pause-event of the micro sequencer supports additional (optional) attributes such as on/off velocity values and/or attached controller data series. This way you can easily attach additional articulation attributes to each individual note in alignment with note-on and duration timestamps. Attributes are either single events inserted at the current timestamp in sequence or continous event series inserted along the given note duration. Attributes can be any kind of controller, aftertouch, pitchbend, sysex or tempo events.
 <img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/Example4.png width="100%">
 
-**usage**
+------
+
+## usage
 
 generic usage:
 
@@ -150,7 +156,9 @@ To get started quickly and to see how the output looks like, you can just proces
 Example: read/write a smf midi file:
 <img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img0.png width="100%">
 
-**tutorial pages**
+
+
+## tutorial pages
 <img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/Tut_p3.PNG width="100%">
 <img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/Tut_p4.PNG width="100%">
 <img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/Tut_p5.PNG width="100%">
