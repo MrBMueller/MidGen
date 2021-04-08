@@ -1,4 +1,4 @@
-
+For more detailed project information check out [Software Projects](http://mrbmueller.github.io/index.html) or the [Manual](http://mrbmueller.github.io/MidGen.html).
 
 # MidGen
 
