@@ -1,4 +1,4 @@
-[TOC]
+
 
 # MidGen
 
@@ -51,14 +51,15 @@ Actually there are much more arguments available, but those are the most importa
  - `<sequence>` is a text based argument representing the actual sequence to insert
 
 Example - simple micro sequence:
-<img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/Example3.png width="100%">
+
+<p align="center"> <img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/Example3.png style="zoom:100%;"  > </p>
 
 The sequence above is mostly self explanatory.
 
 ### durations
 Event-durations are typically provided in whole note units either as integer or floating point numbers or as equations such as `1/4` or `1/4+1/8`, `1/4+1/8+1/16` etc. To shortcut dotted note equations, you can just put tailing `+` signs after the duration value. For instance a dotted quarter can be written either as `1/4+1/8` or alternatively as `1/4+`. Double or triple dotted notes are written respectively with tailing `++` or `+++` signs. Similarly you can shorten a note by its half length with tailing `-` signs. The example below shows few different variants of duration timestamps.
 
-<img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img4.png width="100%">
+<img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img4.png width="100%"  >
 If the timestamp is omitted, the sequencer automatically applies the latest valid timestamp value.
 
 #### duration alignment
@@ -67,7 +68,7 @@ To avoid complex arithmetic equations and to keep sequences more readable, it is
 #### visual beat/bar separator `|`
 In order to keep the sequence more structured and readable, it is possible to insert additional `|` characters to visualize bar, beat or other separations. Semantically they dont have any meaning and are just ignored like comments or remarks by the sequencer as long as they stay in clear separation from events.
 
-<img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img5.png width="100%">
+<img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img5.png style="zoom:;"  >
 
 
 ### note events
@@ -81,14 +82,15 @@ The example above just demonstrates how to concatenate multiple micro sequences 
 #### relative note events
 Since the micro sequencer keeps internally track about note values, it is possible to use relative note intervals in addition to absolute ones. Relative notes are determined by preceding up `^` or down `v` symbols in front of the note values. If there is no note number specified, the sequencer assumes just one relative note step.
 
-<img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img7.png width="100%">
+<img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img7.png  >
 
 
 #### flat (b) and sharp (#) symbols
 Note values can be increased or decreased in semitones by putting either flat and/or sharp symbols after the note value. Traditional music puts them in front of the note, but here it is required to put them after the note value as additional attributes. The sequencer allows having multiple consecutive and/or mixed symbols by simply summing up all flats and sharps to get the final value.
 
 Example - C major with few additional flats and sharps:
-<img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img6.png width="100%">
+
+<p align="center"><img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img6.png style="zoom: 80%;"  >
 
 #### rests
 rests and pauses are simply written by the `%` character.
