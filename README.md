@@ -1,19 +1,45 @@
-For more detailed project information check out [Software Projects](http://mrbmueller.github.io/index.html) or the [Manual](http://mrbmueller.github.io/MidGen.html).
+
 
 # MidGen
 
 MidGen is a Perl based standard midi file reader/processor/generator. It includes Perl modules and packages to create/read/write and process standard midi (smf) files based on Perl input scripts. Essentially this tool provides a framework, which is specifically designed for experiments with musical pattern, arpeggios, accompaniment styles, arrangements or entire scores. A build-in "micro sequencer" function translates text-based micro-sequences into smf midi data. Since everything runs in perl environment, you can take advantage from programming languages like using variables for micro-sequences, storing arrangement parts in sub-procedures, repeat sequence iterations with loops, etc. together with convenient smf input/output functionality. This approach allows writing music in traditional sequenced format in combination with algorithmic or procedural programming functionalities. In addition, there are many functions for SMF data manipulation implemented such as copy/paste/insert/transpose which are working either on track level or across the entire arrangement. Also you can include and merge additional external smf midi data into your arrangement so that for instance live played parts get merged with generated accompaniment pattern. Essentially there is no limit for creativity since its an open framework were you can easily add additional features, functions, procedures or other extensions with your own ideas.
 
+
+
 Example smf output arrangement in score representation:
 <img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img3.png width="100%">
+
+
 
 The score was entirely generated from the example source code below using micro sequences:
 <img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img1.png width="100%">
 
+
+
 To compile the midi output file, just run:
 <img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img2.png width="100%">
 
+
+
 The output is typically a type 1 smf midi file saved in your current working directory from where the script gets executed. In addition, the console output provides an overview and displays general song- and track-information of your arrangement. For more detailed result debug, individual event lists per track are written as regular text files along with the smf output.
+
+
+
+------
+
+## usage
+
+Once you have perl installed, just run:
+
+    perl MidGen.pl <project.pl>
+
+If there is no project-file specified, the default project (Projects\Current.pl) will get processed.
+
+To get started quickly and to see how the output looks like, you can also just process a smf midi file thru the program or try one of the provided project examples. MidGen was tested with ActiveState Perl, Strawberry Perl portable and various Linux/Ubuntu Perl versions.
+
+Example: read/write a smf midi file:
+
+<img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img0.png width="100%">
 
 ------
 
@@ -35,11 +61,11 @@ MidGen supports all types of midi events including channel-, SysEx-, Meta- and E
 
 ------
 
-## micro sequencer
+## Micro-Sequencer
 
-The micro-sequencer is a central and important function especially written for convenient note- , controller- and other data insertions. Essentially it inserts a sequence of notes and/or controller/meta/sysex events into a specified track, based on a given start-time, scale (e.g. chromatic, major, minor, etc.) and base note (e.g. 60 - middle C). The sequence is provided as a consecutive, white space separated list of `<duration>:<data>` pairs representing duration timestamps with associated event data. The micro-sequencer keeps internally track of timestamps, note-pitches and other data and typically advances in time with each provided duration value unless otherwise specified (e.g. for overlap notes or chords). In addition, the sequencer returns the total duration of the provided micro-sequence in whole note units. This allows the caller thread keeping track about the total timestamp if you simply sum up all micro-sequence durations in case they belong logically together. The micro sequencer function is called from Edit package as follow:
+The micro-sequencer is a central and important function especially written for convenient note- , controller- and other data insertions. Essentially it inserts a sequence of notes and/or controller/meta/sysex events into a specified track, based on a given start-time, scale (e.g. chromatic, major, minor, etc.) and base note (e.g. 60 - middle C). The sequence is provided as a consecutive, white space separated list of `<duration>:<data>` pairs representing duration timestamps with associated event data. The micro-sequencer keeps internally track of timestamps, note-pitches and other data and typically advances in time with each provided event-duration value unless otherwise specified (e.g. for overlap notes or chords). In addition, the sequencer returns the total duration of the provided micro-sequence in whole note units. This allows the caller thread keeping track about the total timestamp if you simply sum up all micro-sequence durations in case they belong logically together. The micro sequencer function is called from Edit package as follow:
 
-    Edit::Seq(<smf-hash-pointer>, <track>, <start-time>, <base-note>, <scale>, <sequence>);
+    <duration> = Edit::Seq(<smf-hash-pointer>, <track>, <start-time>, <base-note>, <scale>, <sequence>);
 
 Actually there are much more arguments available, but those are the most important ones to start with.
 
@@ -48,7 +74,7 @@ Actually there are much more arguments available, but those are the most importa
  - `<start-time>` is basically the timestamp in whole note units where the sequence gets inserted.
  - `<base-note>` determines the sequence reference note `0` as the sequencer works relative from there. In conjunction with the scale it provides finally the sequence key.
  - `<scale>` 0:chromatic (typically used in combination with base-note zero to access regular midi note numbers - e.g. for percussion sequences); 2:major; 3:minor
- - `<sequence>` is a text based argument representing the actual sequence to insert
+ - `<sequence>` is a text string argument representing the actual sequence to insert
 
 Example - simple micro sequence:
 
@@ -56,49 +82,70 @@ Example - simple micro sequence:
 
 The sequence above is mostly self explanatory.
 
-### durations
-Event-durations are typically provided in whole note units either as integer or floating point numbers or as equations such as `1/4` or `1/4+1/8`, `1/4+1/8+1/16` etc. To shortcut dotted note equations, you can just put tailing `+` signs after the duration value. For instance a dotted quarter can be written either as `1/4+1/8` or alternatively as `1/4+`. Double or triple dotted notes are written respectively with tailing `++` or `+++` signs. Similarly you can shorten a note by its half length with tailing `-` signs. The example below shows few different variants of duration timestamps.
+### Timestamps and Durations
+Timestamps and event-durations are typically provided in whole note units either as integer or floating point numbers or as equations such as `1/4` or `1/4+1/8`, `1/4+1/8+1/16` etc. To shortcut dotted note equations, you can just append tailing `+` signs to the duration value. For instance a dotted quarter can be written either as `1/4+1/8` or alternatively as `1/4+`. Double or triple dotted notes are written respectively with tailing `++` or `+++` signs. Similarly you can shorten a note by its half length with tailing `-` signs. The example below shows few different variants of duration timestamps.
 
 <img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img4.png width="100%"  >
-If the timestamp is omitted, the sequencer automatically applies the latest valid timestamp value.
 
-#### duration alignment
+> ***Note: If there is no timestamp provided, the sequencer automatically applies the latest valid timestamp value.***
+
+#### Duration alignment
 To avoid complex arithmetic equations and to keep sequences more readable, it is possible to align event durations to given timestamp grid boundaries by using the alignment operator `|` in front of the value. This advices the sequencer to proceed in time until the next grid boundary timestamp is reached. So in the example above, the `|1/1:%` event will simply insert a rest in alignment with the next whole note timestamp value. In this case it proceeds to the next bar since the time signature is 4/4 (whole note grid boundary).
 
-#### visual beat/bar separator `|`
-In order to keep the sequence more structured and readable, it is possible to insert additional `|` characters to visualize bar, beat or other separations. Semantically they dont have any meaning and are just ignored like comments or remarks by the sequencer as long as they stay in clear separation from events.
+#### Visual beat/bar separator
+In order to keep the sequence more structured and readable, it is possible to insert additional `|` character symbols to visualize bar, beat or other timestamp separations. Semantically they dont have any meaning and are just ignored like comments or remarks by the sequencer as long as they stay in clear separation from events.
 
-<img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img5.png style="zoom:;"  >
+<p align="center"> <img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img5.png style="zoom:90%;"  > </p>
 
+### Events and event types
 
-### note events
-Note events are typically provided as numerical values rather than traditional musical symbols. This decouples them from scales and tonal systems and keeps the flexibility for additional arithmetic operations. They can get specified either in absolut- or relative (interval) values by preceding `^` (up) or `v` (down) symbols. Absolute values can be either positive or negative in case they refer to notes below the given basenote.
+The microsequencer supports different smf event types such as
+
+- note events
+- controller events including after touch, sysex, program change and tempo events either as single event or as continous controller series
+- marker and lyric text events
+- time- and key-signature changes
+- pause/rest/NOP "events"
+
+Events are always paired with duration timestamps even though some event types do not really require a duration such as marker or lyric events. In this case a zero duration can be used if the sequencer should not advance in time. Events can also get paired to insert multiple event types at the same time with the same duration in one sequencer event. For instance you can insert a note and in parallel a continous controller using the same timestamp and duration.
+
+#### Note events
+
+##### absolute note events
+
+Note events are typically provided as numerical values rather than traditional musical symbols. This decouples them from scales and tonal systems and keeps the flexibility for additional arithmetic operations. They can get specified either in absolut- or relative (interval) values by preceding `^` (up) or `v` (down) symbols. Absolute values can be either positive or negative in case they refer to notes below the given basenote. Notes will follow the given scale and key provided by micro sequencer arguments `<scale>` and `<basenote>`. In result, note zero is basically the basenote.
 
 Example - Two consecutive micro sequences with additional marker `M<text>` events and bar separators:
 <img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/Example1.png width="100%">
 
-The example above just demonstrates how to concatenate multiple micro sequences using a global timestamp variable.
+The example above just demonstrates how multiple micro sequences can get concatenated using a global timestamp variable.
 
-#### relative note events
+##### relative note events
 Since the micro sequencer keeps internally track about note values, it is possible to use relative note intervals in addition to absolute ones. Relative notes are determined by preceding up `^` or down `v` symbols in front of the note values. If there is no note number specified, the sequencer assumes just one relative note step.
 
 <img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img7.png  >
 
 
-#### flat (b) and sharp (#) symbols
+##### Flat (b) and Sharp (#) symbols
 Note values can be increased or decreased in semitones by putting either flat and/or sharp symbols after the note value. Traditional music puts them in front of the note, but here it is required to put them after the note value as additional attributes. The sequencer allows having multiple consecutive and/or mixed symbols by simply summing up all flats and sharps to get the final value.
 
 Example - C major with few additional flats and sharps:
 
 <p align="center"><img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img6.png style="zoom: 80%;"  >
 
-#### rests
-rests and pauses are simply written by the `%` character.
+#### Rests
+rests and pauses are simply written by the `%` character symbol.
 <img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/Example2.png width="100%">
 
-### sub-sequences, repetitions and loops
+### repetitions, sub-sequences and loops
 
 To repeat a single event, you can just use the `.` (dot) symbol.
+
+<img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img13.png width="50%">
+
+To repeat operations, you can use the '=' (equal) symbol.
+
+<img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img14.png width="50%">
 
 In addition, the micro-sequencer comes with several build-in loop and sub-sequence functions for sequence repetitions. Essentially you can enclose sequences or parts of sequences within braces `n{<sub-sequence>}` and put a repetition number `n` in front of them. If no repetition number is given, the sequencer assumes one insertion w/o repetition, otherwise the sequencer will insert the enclosed sub-sequence(s) n times. Since the sequencer allows the insertion of recursively nested sub-sequences, repetition pattern can quickly get large and complex by just a few instructions. The example below shows a small input sequence with two nested sub-sequences.
 
@@ -141,24 +188,6 @@ Each note- or pause-event of the micro sequencer supports additional (optional) 
 <img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/Example4.png width="100%">
 
 ------
-
-## usage
-
-generic usage:
-
-    perl MidGen.pl <smf.mid>
-or:
-
-    perl MidGen.pl <project.pl>
-
-If there is no file specified, the default project (Projects\Current.pl) gets processed.
-
-To get started quickly and to see how the output looks like, you can just process a smf midi file thru the program or try one of the provided project examples. MidGen was tested with ActiveState Perl, Strawberry Perl portable and various Linux/Ubuntu Perl versions.
-
-Example: read/write a smf midi file:
-<img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img0.png width="100%">
-
-
 
 ## tutorial pages
 <img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/Tut_p3.PNG width="100%">
