@@ -139,11 +139,11 @@ rests and pauses are simply written by the `%` character symbol.
 
 ### repetitions, sub-sequences and loops
 
-To repeat a single event, you can just use the `.` (dot) symbol.
+To repeat single events with the same duration and note value, you can just use the `.` (dot) symbol.
 
 <img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img13.png width="50%">
 
-To repeat operations, you can use the '=' (equal) symbol.
+To repeat operations (e.g. relative note changes), you can use the `=` (equal) symbol.
 
 <img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img14.png width="50%">
 
