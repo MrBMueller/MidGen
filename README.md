@@ -1,5 +1,7 @@
 
 
+[TOC]
+
 # MidGen
 
 MidGen is a Perl based standard midi file reader/processor/generator. It includes Perl modules and packages to create/read/write and process standard midi (smf) files based on Perl input scripts. Essentially this tool provides a framework, which is specifically designed for experiments with musical pattern, arpeggios, accompaniment styles, arrangements or entire scores. A build-in "micro sequencer" function translates text-based micro-sequences into smf midi data. Since everything runs in perl environment, you can take advantage from programming languages like using variables for micro-sequences, storing arrangement parts in sub-procedures, repeat sequence iterations with loops, etc. together with convenient smf input/output functionality. This approach allows writing music in traditional sequenced format in combination with algorithmic or procedural programming functionalities. In addition, there are many functions for SMF data manipulation implemented such as copy/paste/insert/transpose which are working either on track level or across the entire arrangement. Also you can include and merge additional external smf midi data into your arrangement so that for instance live played parts get merged with generated accompaniment pattern. Essentially there is no limit for creativity since its an open framework were you can easily add additional features, functions, procedures or other extensions with your own ideas.
@@ -7,16 +9,19 @@ MidGen is a Perl based standard midi file reader/processor/generator. It include
 
 
 Example smf output arrangement in score representation:
+
 <img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img3.png width="100%">
 
 
 
 The score was entirely generated from the example source code below using micro sequences:
+
 <img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img1.png width="100%">
 
 
 
 To compile the midi output file, just run:
+
 <img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img2.png width="100%">
 
 
@@ -78,7 +83,7 @@ Actually there are much more arguments available, but those are the most importa
 
 Example - simple micro sequence:
 
-<p align="center"> <img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/Example3.png style="zoom:100%;"  > </p>
+<img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/Example3.png style="zoom:100%;"  >
 
 The sequence above is mostly self explanatory.
 
@@ -116,14 +121,15 @@ Events are always paired with duration timestamps even though some event types d
 Note events are typically provided as numerical values rather than traditional musical symbols. This decouples them from scales and tonal systems and keeps the flexibility for additional arithmetic operations. They can get specified either in absolut- or relative (interval) values by preceding `^` (up) or `v` (down) symbols. Absolute values can be either positive or negative in case they refer to notes below the given basenote. Notes will follow the given scale and key provided by micro sequencer arguments `<scale>` and `<basenote>`. In result, note zero is basically the basenote.
 
 Example - Two consecutive micro sequences with additional marker `M<text>` events and bar separators:
-<img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/Example1.png width="100%">
+
+<img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/Example1.png style="zoom: 80%;" >
 
 The example above just demonstrates how multiple micro sequences can get concatenated using a global timestamp variable.
 
 ##### relative note events
 Since the micro sequencer keeps internally track about note values, it is possible to use relative note intervals in addition to absolute ones. Relative notes are determined by preceding up `^` or down `v` symbols in front of the note values. If there is no note number specified, the sequencer assumes just one relative note step.
 
-<img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img7.png  >
+<img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img7.png style="zoom:80%;"   >
 
 
 ##### Flat (b) and Sharp (#) symbols
@@ -131,25 +137,23 @@ Note values can be increased or decreased in semitones by putting either flat an
 
 Example - C major with few additional flats and sharps:
 
-<p align="center"><img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img6.png style="zoom: 80%;"  >
+<img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img6.png style="zoom: 80%;"  >
+
 
 #### Rests
 rests and pauses are simply written by the `%` character symbol.
-<img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/Example2.png width="100%">
+
+<img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/Example2.png  >
 
 ### repetitions, sub-sequences and loops
 
 To repeat single events with the same duration and note value, you can just use the `.` (dot) symbol.
 
-<img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img13.png width="50%">
-
-To repeat operations (e.g. relative note changes), you can use the `=` (equal) symbol.
-
-<img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img14.png width="50%">
+<img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img13.png   >
 
 In addition, the micro-sequencer comes with several build-in loop and sub-sequence functions for sequence repetitions. Essentially you can enclose sequences or parts of sequences within braces `n{<sub-sequence>}` and put a repetition number `n` in front of them. If no repetition number is given, the sequencer assumes one insertion w/o repetition, otherwise the sequencer will insert the enclosed sub-sequence(s) n times. Since the sequencer allows the insertion of recursively nested sub-sequences, repetition pattern can quickly get large and complex by just a few instructions. The example below shows a small input sequence with two nested sub-sequences.
 
-<img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img9.png width="100%">
+<img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img9.png style="zoom: 67%;"    >
 
 
 Finally, different types of braces have different meanings:
@@ -163,7 +167,7 @@ Since the sequencer keeps track of timestamps, durations and notes, you can pres
 #### additional timestamp directives
 Usually the sequencer takes care about timestamp values and advances in time with each provided event duration. This function is typically usefull for monotonic lines like lead melodies, bass lines, etc. with non-overlapping notes. However in many cases you need note or event overlaps such as in chords or many other situations. Therefore the sequencer provides additional timestamp directives by having additional `<` symbols in front and/or after the given timestamp value.
 
-<img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img10.png width="100%">
+<img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img10.png style="zoom: 80%;"  >
 
 The examples above show 4 different scenarios:
 
@@ -176,16 +180,18 @@ The 3rd scenario demonstrates how the sequencer goes back in time before the not
 The 4th scenario demonstrates the combination of both previous scenarios. The sequencer goes back in time before the event gets inserted, advances in time with the event and finally goes back in time again after the event insertion. In result, the note and the return marker appear earlier in time than the entry marker. Effectively the sequencer is running backward and returning a negative sequence length in this case.
 
 Finally timestamp directives can be used to write overlap notes, chords or sub-sequence overhangs at the beginning or ending of an sequence. The example below shows a simple chord triad with 3 stacked notes. In this case only the last note get advanced in time while the 1st and 2nd notes doesnt advance. If there is no timestamp value provided, the given timestamp directive is still valid and the sequencer will not advance after the event insertion.
-<img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img11.png width="100%">
+
+<img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img11.png style="zoom:80%;"  >
 
 **micro-sequence overlaps (overhang)**
 Another example below shows how to setup sequence overlaps or overhangs using timestamp directives. In some cases it is required having extra events or overlap events either before the sequence actually starts or after the sequence has been finished. This can easily get achived by timestamp directives going back in time before the sequence starts or after the sequence has been finished. The example below shows two concatenated micro-sequences with additional overhang events on each sequence side.
 
-<img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img12.png width="100%">
+<img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img12.png style="zoom: 80%;"  >
 
 **additional note attribute data**
 Each note- or pause-event of the micro sequencer supports additional (optional) attributes such as on/off velocity values and/or attached controller data series. This way you can easily attach additional articulation attributes to each individual note in alignment with note-on and duration timestamps. Attributes are either single events inserted at the current timestamp in sequence or continous event series inserted along the given note duration. Attributes can be any kind of controller, aftertouch, pitchbend, sysex or tempo events.
-<img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/Example4.png width="100%">
+
+<img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/Example4.png style="zoom:90%;"  >
 
 ------
 
