@@ -56,7 +56,9 @@ Internally the smf is nothing else than a multidimensional hash structure with i
 
 Reading a midi file is as simple as:
 
-    my %smf = MIDI::Read("filename.mid");
+```perl
+my %smf = MIDI::Read("filename.mid");
+```
 
 **timestamps and durations**
 
@@ -70,7 +72,7 @@ MidGen supports all types of midi events including channel-, SysEx-, Meta- and E
 
 ## Micro-Sequencer
 
-The micro-sequencer is a central and important function especially written for convenient note- , controller- and other data insertions. Essentially it inserts a sequence of notes and/or controller/meta/sysex events into a specified track, based on a given start-time, scale (e.g. chromatic, major, minor, etc.) and base note (e.g. 60 - middle C). The sequence is provided as a consecutive, white space separated list of `<duration>:<data>` pairs representing duration timestamps with associated event data. The micro-sequencer keeps internally track of timestamps, note-pitches and other data and typically advances in time with each provided event-duration value unless otherwise specified (e.g. for overlap notes or chords). In addition, the sequencer returns the total duration of the provided micro-sequence in whole note units. This allows the caller thread keeping track about the total timestamp if you simply sum up all micro-sequence durations in case they belong logically together. The micro sequencer function is called from Edit package as follow:
+The micro-sequencer is a central and important function especially written for convenient note- , controller- and other data insertions. Essentially it inserts a sequence of notes and/or controller/meta/sysex events into a specified track, based on a given start-time, scale (e.g. chromatic, major, minor, etc.) and base note (e.g. 60 - middle C). The sequence is provided as a consecutive, white space separated list of `<duration>:<data>` pairs representing duration timestamps with associated event data in text format. The micro-sequencer keeps internally track of timestamps, note-pitches and other data and typically advances in time with each provided event-duration value unless otherwise specified (e.g. for overlap notes or chords). In addition, the sequencer returns the total duration of the provided micro-sequence in whole note units. This allows the caller thread keeping track about the total timestamp if you simply sum up all micro-sequence durations in case they belong logically together. The micro sequencer function is called from Edit package as follow:
 
     <duration> = Edit::Seq(<smf-hash-pointer>, <track>, <start-time>, <base-note>, <scale>, <sequence>);
 
@@ -149,9 +151,9 @@ rests and pauses are simply written by the `%` character symbol.
 
 ### repetitions, sub-sequences and loops
 
-To repeat single events with the same duration and note value, you can just use the `.` (dot) symbol.
+To repeat single events with the same duration and note or rest value, you can just use the `.` (dot) symbol.
 
-<img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img13.png   >
+<img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img13.png style="zoom: 80%;"      >
 
 In addition, the micro-sequencer comes with several build-in loop and sub-sequence functions for sequence repetitions. Essentially you can enclose sequences or parts of sequences within braces `n{<sub-sequence>}` and put a repetition number `n` in front of them. If no repetition number is given, the sequencer assumes one insertion w/o repetition, otherwise the sequencer will insert the enclosed sub-sequence(s) n times. Since the sequencer allows the insertion of recursively nested sub-sequences, repetition pattern can quickly get large and complex by just a few instructions. The example below shows a small input sequence with two nested sub-sequences.
 
@@ -160,7 +162,7 @@ In addition, the micro-sequencer comes with several build-in loop and sub-sequen
 
 Finally, different types of braces have different meanings:
 
- - curly `n{<sub-sequence>}` - regular repeat
+ - curly `n{<sub-sequence>}` - normal repeat
  - regular `n(<sub-sequence>)` - preserve/restore duration and note values when a sub-sequence gets entered, but advance in time
  - square `n[<sub-sequence>]` - preserve/restore duration/note and timestamp values when a sub-sequence gets entered (doesnt advance in time)
 
@@ -188,9 +190,16 @@ Finally timestamp directives can be used to write overlap notes, chords or sub-s
 **micro-sequence overlaps (overhang)**
 Another example below shows how to setup sequence overlaps or overhangs using timestamp directives. In some cases it is required having extra events or overlap events either before the sequence actually starts or after the sequence has been finished. This can easily get achived by timestamp directives going back in time before the sequence starts or after the sequence has been finished. The example below shows two concatenated micro-sequences with additional overhang events on each sequence side.
 
-<img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img12.png style="zoom: 80%;"  >
+<img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img12.png style="zoom: 67%;"  >
 
-**additional note attribute data**
+#### relative subsequences and pattern templates
+
+Relative subsequences are basically sequences or partial sequences without absolute note values refering exclusively to relative notes based on the sequencers internal state. Such sequences can be used to build small micro-sequence pattern templates decoupled from absolute note values. This allows for instance building different chord-types or small arpeggios without attaching them to absolute note values for later instanciation within sequences.
+
+<img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img14.png style="zoom: 80%;"  >
+
+### additional note attribute data
+
 Each note- or pause-event of the micro sequencer supports additional (optional) attributes such as on/off velocity values and/or attached controller data series. This way you can easily attach additional articulation attributes to each individual note in alignment with note-on and duration timestamps. Attributes are either single events inserted at the current timestamp in sequence or continous event series inserted along the given note duration. Attributes can be any kind of controller, aftertouch, pitchbend, sysex or tempo events.
 
 <img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/Example4.png style="zoom:90%;"  >
