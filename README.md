@@ -1,3 +1,5 @@
+For an HTML version check out the [Manual](http://mrbmueller.github.io/MidGen.html) under [Software Projects](http://mrbmueller.github.io/index.html).
+
 
 
 [TOC]
