@@ -151,32 +151,34 @@ rests and pauses are simply written by the `%` character symbol.
 
 ### repetitions, sub-sequences and loops
 
-**repeat event operator**
+#### repeat event operator
 
 To repeat single events or rests with the same duration and note value, you can just use the `.` (dot) symbol.
 
 <img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img13.png style="zoom: 80%;"      >
 
-**continue event operator**
+#### continue event operator
 
 The continue event operator `>` is similar to regular repeats, but ignores rest events and simply 'continues' playing with the latest note value. This event type is mainly used in combination with pattern sequence templates.
 
 <img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img15.png style="zoom: 80%;"      >
 
-In addition, the micro-sequencer comes with several build-in loop and sub-sequence functions for sequence repetitions. Essentially you can enclose sequences or parts of sequences within braces `n{<sub-sequence>}` and put a repetition number `n` in front of them. If no repetition number is given, the sequencer assumes one insertion w/o repetition, otherwise the sequencer will insert the enclosed sub-sequence(s) n times. Since the sequencer allows the insertion of recursively nested sub-sequences, repetition pattern can quickly get large and complex by just a few instructions. The example below shows a small input sequence with two nested sub-sequences.
+#### subsequence repetitions
+
+In addition, the micro-sequencer comes with several build-in loop and sub-sequence functions for sequence repetitions. Essentially you can enclose sequences or parts of sequences within parentheses or braces `n{<sub-sequence>}` and put a repetition number `n` in front of them. If no repetition number is given, the sequencer assumes one insertion w/o repetition, otherwise the sequencer will insert the enclosed sub-sequence(s) n times. Since the sequencer allows the insertion of recursively nested sub-sequences, repetition pattern can quickly get large and complex by just a few instructions. The example below shows a small input sequence with two nested sub-sequences.
 
 <img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img9.png style="zoom: 67%;"    >
 
 
-Finally, different types of braces have different meanings:
+Finally, different types of parentheses have different meanings:
 
  - curly `n{<sub-sequence>}` - normal repeat
  - regular `n(<sub-sequence>)` - preserve/restore duration and note values when a sub-sequence gets entered, but advance in time
  - square `n[<sub-sequence>]` - preserve/restore duration/note and timestamp values when a sub-sequence gets entered (doesnt advance in time)
 
-Since the sequencer keeps track of timestamps, durations and notes, you can preserve the previous duration/note and timestamp values when a sub-sequence get entered. In result, the sequencer can restore those values when returning to the main-sequence. Actually if the sequence only works with absolute note values it doesnt matter, but when the sequence runs with relative intervals it makes a difference.
+Since the sequencer keeps track of timestamps, durations and notes, you can preserve the previous duration/note and timestamp values when a sub-sequence get entered. In result, the sequencer can restore those values when returning to the main-sequence. This is especially important when building pattern templates using relative note values.
 
-#### additional timestamp directives
+### additional timestamp directives
 Usually the sequencer takes care about timestamp values and advances in time with each provided event duration. This function is typically usefull for monotonic lines like lead melodies, bass lines, etc. with non-overlapping notes. However in many cases you need note or event overlaps such as in chords or many other situations. Therefore the sequencer provides additional timestamp directives by having additional `<` symbols in front and/or after the given timestamp value.
 
 <img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img10.png style="zoom: 80%;"  >
@@ -215,6 +217,10 @@ The example above shows how a simple chord triad is setup as a template and beei
 The following example is very similar and shows how to insert a small arpeggio sequence using templates.
 
 <img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img16.png style="zoom: 80%;"  >
+
+Now one template example demonstrating how to use subsequences with and without sequencer value restoration. Actually when we simply concatenate a sub-sequence template such as `" > ^2 ^2 . "`  multiple times, the sequencer will increase continously all note values with each insertion. In contrast, if we put the sub-sequence into parentheses, the sequencer will take care about storing and restoring note values when the template gets entered or left. Therefore the resulting sequence is totally different.
+
+<img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img17.png style="zoom: 80%;"  >
 
 ### additional note attribute data
 
