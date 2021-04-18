@@ -151,9 +151,17 @@ rests and pauses are simply written by the `%` character symbol.
 
 ### repetitions, sub-sequences and loops
 
-To repeat single events with the same duration and note or rest value, you can just use the `.` (dot) symbol.
+**repeat event operator**
+
+To repeat single events or rests with the same duration and note value, you can just use the `.` (dot) symbol.
 
 <img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img13.png style="zoom: 80%;"      >
+
+**continue event operator**
+
+The continue event operator `>` is similar to regular repeats, but ignores rest events and simply 'continues' playing with the latest note value. This event type is mainly used in combination with pattern sequence templates.
+
+<img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img15.png style="zoom: 80%;"      >
 
 In addition, the micro-sequencer comes with several build-in loop and sub-sequence functions for sequence repetitions. Essentially you can enclose sequences or parts of sequences within braces `n{<sub-sequence>}` and put a repetition number `n` in front of them. If no repetition number is given, the sequencer assumes one insertion w/o repetition, otherwise the sequencer will insert the enclosed sub-sequence(s) n times. Since the sequencer allows the insertion of recursively nested sub-sequences, repetition pattern can quickly get large and complex by just a few instructions. The example below shows a small input sequence with two nested sub-sequences.
 
@@ -192,11 +200,21 @@ Another example below shows how to setup sequence overlaps or overhangs using ti
 
 <img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img12.png style="zoom: 67%;"  >
 
-#### relative subsequences and pattern templates
+### Pattern sequence templates
 
-Relative subsequences are basically sequences or partial sequences without absolute note values refering exclusively to relative notes based on the sequencers internal state. Such sequences can be used to build small micro-sequence pattern templates decoupled from absolute note values. This allows for instance building different chord-types or small arpeggios without attaching them to absolute note values for later instanciation within sequences.
+Pattern sequence templates are typically sub- or partial sequences refering exclusively to relative notes based on the sequencers internal states. This decouples them from absolute note values and keeps the templates  more generic. Usually they are assigned to perl variables for further usage in higher level sequence strings.
+
+This allows for instance building different chord-type templates or small arpeggio pattern templates without attaching them to absolute note values for later instanciation within sequences.
 
 <img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img14.png style="zoom: 80%;"  >
+
+The example above shows how a simple chord triad is setup as a template and beeing used in a small sequence.
+
+> Remark: Events like `1/1<:0_%` are so called NOP (no operation) events since they do not advance in time neither inserting a note, however they instruct the sequencer to set the current timestamp and the current note value for further sequence events.
+
+The following example is very similar and shows how to insert a small arpeggio sequence using templates.
+
+<img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img16.png style="zoom: 80%;"  >
 
 ### additional note attribute data
 
