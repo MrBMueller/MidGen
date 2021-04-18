@@ -232,11 +232,17 @@ Each note- or pause-event of the micro sequencer supports additional (optional) 
 
 #### note on velocity
 
-Note-On velocities are simply written as a floating point values in adition to the note events. If the note event is not specified and you put only a floating point value into the sequence, the sequencer will repeat the previous note with the given velocity values.
+Note-On velocities are simply written as floating point values in adition to note events. If a note event is not specified, the sequencer will repeat the previous note with the provided velocity values. This can be useful to shortcut for instance percussion sequences.
 
 <img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img19.png style="zoom: 80%;"  >
 
+#### note off velocity
 
+Note-Off velocities are specified as `r<velocity>` floating point values. They are rarely used and most sequencers doesnt really display them, but here an Cubase example showing both Note-On and -Off velocities together.
+
+<img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img20.png style="zoom: 80%;"  >
+
+#### controller data
 
 Attributes are either single events inserted at the current timestamp in sequence or continous event series inserted along the given note duration. Attributes can be any kind of controller, aftertouch, pitchbend, sysex or tempo events.
 
