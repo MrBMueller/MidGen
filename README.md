@@ -222,9 +222,23 @@ Now one template example demonstrating how to use subsequences with and without 
 
 <img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img17.png style="zoom: 80%;"  >
 
+The next example shows the effect of additional square brackets around the template sequence and their effect. In this case not only note values are strored and restored, but also the timestamp values get preserved when the subsequence get entered. In result, the sequencer jumps back in time once the sub-sequence template has been processed and starts over again from the beginning. Therefore the sequence appears now stacked rather than consecutive in time.
+
+<img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img18.png style="zoom: 80%;"  >
+
 ### additional note attribute data
 
-Each note- or pause-event of the micro sequencer supports additional (optional) attributes such as on/off velocity values and/or attached controller data series. This way you can easily attach additional articulation attributes to each individual note in alignment with note-on and duration timestamps. Attributes are either single events inserted at the current timestamp in sequence or continous event series inserted along the given note duration. Attributes can be any kind of controller, aftertouch, pitchbend, sysex or tempo events.
+Each note- or pause-event of the micro sequencer supports additional (optional) attributes such as on/off velocity values and/or attached controller data series. This way you can easily attach additional articulation attributes to each individual note in alignment with note-on and duration timestamps. Note attributes are typically appended to existing event data by additional `_` separations. For example `" 1/4:0_.75_r.25 "` inserts a quarter note with note value 0 (relative to scale and base note), NoteOn velocity 0.75 and release velocity 0.25.
+
+#### note on velocity
+
+Note-On velocities are simply written as a floating point values in adition to the note events. If the note event is not specified and you put only a floating point value into the sequence, the sequencer will repeat the previous note with the given velocity values.
+
+<img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img19.png style="zoom: 80%;"  >
+
+
+
+Attributes are either single events inserted at the current timestamp in sequence or continous event series inserted along the given note duration. Attributes can be any kind of controller, aftertouch, pitchbend, sysex or tempo events.
 
 <img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/Example4.png style="zoom:90%;"  >
 
