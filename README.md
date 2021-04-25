@@ -52,13 +52,27 @@ Example: read/write a smf midi file:
 
 ## internal smf data structure
 
-Internally the smf is nothing else than a multidimensional hash structure with integer key values across all hierarchy levels. The top level key represents the track number (except "track" -1 which is used for smf specific information), the 2nd level key represent the eventtime in ticks based on the smf PPQ setting and the 3rd level key is the event ID representing the event order within a given tick. This allows simple access and iterations across all smf events for easy data manipulation.
+Internally the smf is nothing else than a multidimensional hash structure with integer key values across all hierarchy levels. The top level key represents the track number (except "track" -1 which is used for smf specific information like filename, smf type, PPQ, etc.), the 2nd level key represent the eventtime in ticks based on the smf PPQ setting and the 3rd level key is the event ID representing the event order within a given tick. This allows simple access and iterations across all smf events for easy data manipulation.
 
-Reading a midi file is as simple as:
+Reading and writing a midi file is as simple as:
 
 ```perl
-my %smf = MIDI::Read("filename.mid");
+my %smf = MIDI::Read("filename.mid"); MIDI::Write(\%smf, "filename_new.mid");
 ```
+
+In addition, you can also display general track overview information on the console output screen plus getting individual event lists per track by calling MidiDebug::PrintInfo() such as:
+
+```perl
+my %smf = MIDI::Read("filename.mid"); MidiDebug::PrintInfo(\%smf); MIDI::Write(\%smf, "filename_new.mid");
+```
+
+Since MidGen has already defined a default smf datastructure called `%main::out` runnig thru MidiDebug::PrintInfo() and MIDI::Write() functions at the very end of the program flow, typically you dont need to care about those functions unless you work with multiple smf structures in parallel. Therefore its also possible to read and write a smf by just running the following instruction:
+
+```perl
+%main::out = MIDI::Read("filename"); $main::out{-1}{0} = "filename_new.mid";
+```
+
+Make sure that you provide a new filename (smf "track" -1, argument 0), else the original smf will be overwritten.
 
 **timestamps and durations**
 
