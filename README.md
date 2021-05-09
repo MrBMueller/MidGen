@@ -6,9 +6,9 @@ For an HTML version check out the [Manual](http://mrbmueller.github.io/MidGen.ht
 
 # MidGen
 
-MidGen is a Perl based standard midi file reader/processor/generator. It includes Perl modules and packages to create/read/write and process standard midi (smf) files based on Perl input scripts. Essentially this tool provides a framework, which is specifically designed for experiments with musical pattern, arpeggios, accompaniment styles, arrangements or entire scores. However MidGen is not only limited to musical data processing since the framework provides furthermore access to all smf event types such as Channel-/SysEx-/Escape- and Meta-events. In general there is no limitation since everything which can be represented by smf can get generated, processed and provided by MidGen.
+MidGen is a Perl based standard midi file reader/processor/generator. It includes Perl modules and packages to create/read/write and process standard midi (smf) files based on Perl input scripts. Essentially this tool provides a framework, which is specifically designed for experiments with musical pattern, arpeggios, accompaniment styles, arrangements or entire scores. However MidGen is not only limited to musical data processing since the framework provides furthermore access to all smf event types such as Channel-/SysEx-/Escape- and Meta-events. In general there is no limitation since everything representable by smf can be generated, processed and provided by MidGen.
 
-A build-in "micro sequencer" function translates text-based micro-sequences into smf midi data. Since everything runs in perl environment, you can take advantage from programming languages like using variables for micro-sequences, storing arrangement parts in sub-procedures, repeat sequence iterations with loops, etc. together with convenient smf input/output functionality. This approach allows writing music in traditional sequenced format in combination with algorithmic or procedural programming functionalities. In addition, there are many functions for SMF data manipulation implemented such as copy/paste/insert/transpose which are working either on track level or across the entire arrangement. Also you can include and merge additional external smf midi data into your arrangement so that for instance live played parts get merged with generated accompaniment pattern. Essentially there is no limit for creativity since its an open framework were you can easily add additional features, functions, procedures or other extensions with your own ideas.
+For musical data, a build-in "micro sequencer" function translates text-based micro-sequences into smf midi events. Since everything runs in perl environment, you can take advantage from programming languages like using variables for micro-sequences, sequence substitutions, storing arrangement parts in sub-procedures, repeat sequence iterations with loops, etc. together with convenient smf input/output functionality. This approach allows writing music in traditional sequenced format in combination with algorithmic or procedural programming functionalities. In addition, there are many functions for SMF data manipulation implemented such as copy/paste/insert/transpose which are working either on track level or across the entire arrangement. Also you can include and merge additional external smf midi data into your arrangement so that for instance live played parts get merged with generated accompaniment pattern. Essentially there is no limit for creativity since its an open framework were you can easily add features, functions, procedures or other extensions with your own ideas.
 
 
 
@@ -54,7 +54,7 @@ Example: read/write a smf midi file:
 
 ## internal smf data structure
 
-Internally the smf is nothing else than a multidimensional hash structure with integer key values across all hierarchy levels. The top level key represents the track number (except "track" -1 which is used for smf specific information like filename, smf type, PPQ, etc.), the 2nd level key represent the eventtime in ticks based on the smf PPQ setting and the 3rd level key is the event ID representing the event order within a given tick. This allows simple access and iterations across all smf events for easy data manipulation.
+Internally the smf is nothing else than a multidimensional hash structure with integer key values across all hierarchy levels. The top level key represents the track number (except "track" -1 which is used for smf specific information like filename, smf type, PPQ, etc.), the 2nd level key represents the eventtime in ticks based on the smf PPQ setting and the 3rd level key is the event ID representing the event order within a given tick. This allows simple access and iterations across all smf events for easy data manipulation.
 
 Reading and writing a midi file is as simple as:
 
@@ -68,7 +68,7 @@ In addition, you can also display general track overview information on the cons
 my %smf = MIDI::Read("filename.mid"); MidiDebug::PrintInfo(\%smf); MIDI::Write(\%smf, "filename_new.mid");
 ```
 
-Since MidGen has already defined a default smf datastructure called `%main::out` runnig thru MidiDebug::PrintInfo() and MIDI::Write() functions at the very end of the program flow, typically you dont need to care about those functions unless you work with multiple smf structures in parallel. Therefore its also possible to read and write a smf by just running the following instruction:
+Since MidGen has already defined a default smf datastructure handle called `%main::out` runnig thru MidiDebug::PrintInfo() and MIDI::Write() functions at the very end of the program flow, you dont need necessarily taking care about those functions unless you work with multiple smf structures in parallel. Therefore its also possible to read and write a smf by just running the following instruction:
 
 ```perl
 %main::out = MIDI::Read("filename"); $main::out{-1}{0} = "filename_new.mid";
@@ -88,7 +88,7 @@ MidGen supports all types of midi events including channel-, SysEx-, Meta- and E
 
 ## Micro-Sequencer
 
-The micro-sequencer is a central and important function especially written for convenient note- , controller- and other data insertions. Essentially it inserts a sequence of notes and/or controller/meta/sysex events into a specified track, based on a given start-time, scale (e.g. chromatic, major, minor, etc.) and base note (e.g. 60 - middle C). The sequence is provided as a consecutive, white space separated list of `<duration>:<data>` pairs representing duration timestamps with associated event data in text format. The micro-sequencer keeps internally track of timestamps, note-pitches and other data and typically advances in time with each provided event-duration value unless otherwise specified (e.g. for overlap notes or chords). In addition, the sequencer returns the total duration of the provided micro-sequence in whole note units. This allows the caller thread keeping track about the total timestamp if you simply sum up all micro-sequence durations in case they belong logically together. The micro sequencer function is called from Edit package as follow:
+The micro-sequencer is a central and important function especially written for convenient note- , controller- and other data insertions. Essentially it inserts a sequence of notes and/or controller/meta/sysex events into a specified track, based on a given start-time, scale (e.g. chromatic, major, minor, etc.) and base note (e.g. 60 - middle C). The sequence is provided as a consecutive, white space separated list of `<duration>:<data>` pairs representing duration timestamps with associated event data in text format separated by the colon `:` sympol. The micro-sequencer keeps internally track of timestamps, note-pitches and other data and typically advances in time with each provided event-duration value unless otherwise specified (e.g. for overlap notes or chords). In addition, the sequencer returns the total duration of the provided micro-sequence in whole note units. This allows the caller thread keeping track about the total timestamp if you simply sum up all micro-sequence durations in case they belong logically together. The micro sequencer function is called from Edit package as follow:
 
     <duration> = Edit::Seq(<smf-hash-pointer>, <track>, <start-time>, <base-note>, <scale>, <sequence>);
 
@@ -161,19 +161,24 @@ Example - C major with few additional flats and sharps:
 
 
 #### Rests
-rests and pauses are simply written by the `%` character symbol.
+rests and pauses are simply represented by the `%` character symbol.
 
 <img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/Example2.png  >
 
 ### repetitions, sub-sequences and loops
 
-#### repeat event operator
+#### repeat operator
 
-To repeat single events or rests with the same duration and note value, you can just use the `.` (dot) symbol.
+To repeat single events or rests with the same duration and/or note values, you can just use the `.` (dot) symbol for either duration and/or event data values. The following scenarios are possible:
 
-<img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img13.png style="zoom: 80%;"      >
+- `<duration>:<event>` - regular duration/event data type pair w/o repeat
+- `<duration>:.`  - repeat the latest event note value with a new applied duration value
+- `.:<event>` or `<event>` - repeat the latest duration value with a new applied event note value. in this case, the duration repeat operator and the colon separator  `.:` is not necessarily required and you can shortcut by just writing the new event value as already done in many examples before.
+- `.:.` or shortcut `.` - repeat the whole event using the latest applied duration and event values (true event repeat)
 
-#### continue event operator
+<img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img21.png style="zoom: 80%;"      >
+
+#### continue operator
 
 The continue event operator `>` is similar to regular repeats, but ignores rest events and simply 'continues' playing with the latest note value. This event type is mainly used in combination with pattern sequence templates.
 
@@ -228,41 +233,81 @@ This allows for instance building different chord-type templates or small arpegg
 
 The example above shows how a simple chord triad is setup as a template and beeing used in a small sequence.
 
-> Remark: Events like `1/1<:0_%` are so called NOP (no operation) events since they do not advance in time neither inserting a note, however they instruct the sequencer to set the current timestamp and the current note value for further sequence events.
+> Remark: Some strange looking events like `1/1<:0_%` are so called NOP (no operation) events since they do not advance in time neither inserting a note since a rest is applied in combination with a note value, however they instruct the sequencer to set the current timestamp and the current note value for further sequence events.
 
 The following example is very similar and shows how to insert a small arpeggio sequence using templates.
 
 <img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img16.png style="zoom: 80%;"  >
 
-Now one template example demonstrating how to use subsequences with and without sequencer value restoration. Actually when we simply concatenate a sub-sequence template such as `" > ^2 ^2 . "`  multiple times, the sequencer will increase continously all note values with each insertion. In contrast, if we put the sub-sequence into parentheses, the sequencer will take care about storing and restoring note values when the template gets entered or left. Therefore the resulting sequence is totally different.
+Now one template example demonstrating how to use subsequences with and without sequencer value restoration. Actually when we simply concatenate a sub-sequence template such as `" > ^2 ^2 . "`  multiple times, the sequencer will increase continously all note values with each insertion. In contrast, if we put the sub-sequence into parentheses, the sequencer will take care about preserving and restoring note values when the template gets entered or left. Therefore the resulting sequence is totally different.
 
 <img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img17.png style="zoom: 80%;"  >
 
-The next example shows the effect of additional square brackets around the template sequence and their effect. In this case not only note values are strored and restored, but also the timestamp values get preserved when the subsequence get entered. In result, the sequencer jumps back in time once the sub-sequence template has been processed and starts over again from the beginning. Therefore the sequence appears now stacked rather than consecutive in time.
+The next example shows the effect of additional square brackets around the template sequence and their effect. In this case not only note values, but also timestamp values get preserved when the subsequence get entered. In result, the sequencer jumps back in time once the sub-sequence template has been processed and starts over again from the beginning. Therefore the sequence appears now stacked rather than consecutive in time.
 
 <img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img18.png style="zoom: 80%;"  >
 
 ### additional note attribute data
 
-Each note- or pause-event of the micro sequencer supports additional (optional) attributes such as on/off velocity values and/or attached controller data series. This way you can easily attach additional articulation attributes to each individual note in alignment with note-on and duration timestamps. Note attributes are typically appended to existing event data by additional `_` separations. For example `" 1/4:0_.75_r.25 "` inserts a quarter note with note value 0 (relative to scale and base note), NoteOn velocity 0.75 and release velocity 0.25.
+Each note- or pause-event of the micro sequencer supports additional (optional) attributes such as on/off velocity values and/or attached controller data events or event series. This way you can easily attach additional articulation attributes to each individual note in alignment with note-on and duration timestamps. Note attributes are typically appended to existing event data by undersscore  `_` separations. For example `" 1/4:0_.75_r.25 "` inserts a quarter note with note value 0 (relative to scale and base note), NoteOn velocity 0.75 and release velocity 0.25.
 
 #### note on velocity
 
-Note-On velocities are simply written as floating point values in adition to note events. If a note event is not specified, the sequencer will repeat the previous note with the provided velocity values. This can be useful to shortcut for instance percussion sequences.
+Note-On velocities are simply written as normalized (0.0 ... 1.0) floating point values in adition to note events. If a note event is not specified, the sequencer will repeat the previous note with the provided velocity values. This can be useful to shortcut for instance percussion sequences repeating the same note with different velocities.
 
 <img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img19.png style="zoom: 80%;"  >
 
 #### note off velocity
 
-Note-Off velocities are specified as `r<velocity>` floating point values. They are rarely used and most sequencers doesnt really display them, but here an Cubase example showing both Note-On and -Off velocities together.
+Note-Off velocities are specified by `r<velocity>` floating point values. They are rarely used and most sequencers doesnt really display them, but here an Cubase list edit example showing both Note-On and -Off velocities together.
 
 <img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img20.png style="zoom: 80%;"  >
 
-#### controller data
+#### controller-type  attribute data
 
-Attributes are either single events inserted at the current timestamp in sequence or continous event series inserted along the given note duration. Attributes can be any kind of controller, aftertouch, pitchbend, sysex or tempo events.
+Controller-type attribute data are either additional single events inserted together with NoteOn or rest events at the current timestamp position in sequence or a continous event series inserted along the given note duration. They are appended to note or rest events with additional arguments in the following format:
+
+`<duration>:<event>_C<Controller#>_<Function>_<Centered>_<Value>_<Value1>`
+
+Controller type data can be one of the following event type specified bythe  `Controller#` number argument:
+
+- 0x0..0x7f: regular (7bit) MIDI controller
+- 0x80..0xff: poly after touch by key
+- 0x100: channel after touch
+- 0x101: NoteOn velocity - no real extra events, but modify existing note-on velocities
+- 0x102: NoteOff velocity - no real extra events, but modify existing note-off velocities
+- 0x103: tempo in % (1.0=>100%) - insert tempo events in track zero
+- 0x104: pitchbend
+- 0x105: program change - makes only sense as single event, but can attach dedicated program changes to individual notes
+- 0x200..0x21f: extended (14 bit) MIDI controller
+- 0x300..0x303: extended (14 bit) MIDI controller GP #5-#8
+- 0x304..0x3fff: SysEx callback functions - only available if sysex callback functions are assigned by device specific packages
+- 0x4000..0x7fff: RPN
+- 0x8000..0xbfff: NRPN
+
+The Function argument specifies one of the following data sweep shapes:
+
+- 0: unused
+- 1: linear sweep from Value to Value1 or single event if Value1=Value or if Value1 is not provided
+- 2: full swing sinusoid [0 , 2pi] sweep from Value to Value with amplitude = Value1
+- 3: half swing sinusoid [0 , pi] sweep from Value to Value with amplitude = Value1
+- 4: half sinuoid [-pi/2 , pi/2] transition sweep from Value to Value1
+- 5: sigmoid transition sweep from Value to Value1
+
+> Remark: If the function argument is provided as a negative number, the data sweep will be inverted.
+
+The `Centered` argument determines if the `Value` arguments are provided in centered or uncentered format such as:
+
+- 0: uncentered - normalized values are provided as [0.0 ... 1.0]
+- 1: centered - normalized values are provided as [-1.0 ... 0.0 ... 1.0]
+
+> The centered format makes sense for centered controller types such as pan, balance, pitch-bend, etc. For other controllers such as volume, expression, etc. it makes more sense to use the uncentered format although there is no restriction for one or the other format.
+
+The following example inserts a MIDI controller 7 (volume) series along the given note.
 
 <img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/Example4.png style="zoom:90%;"  >
+
+The following example inserts a MIDI controller 7 (volume) series along the given note.
 
 ------
 
