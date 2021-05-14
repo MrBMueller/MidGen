@@ -265,18 +265,18 @@ Note-Off velocities are specified by `r<velocity>` floating point values. They a
 
 #### controller-type  attribute data
 
-Controller-type attribute data are either additional single events inserted together with NoteOn or rest events at the current timestamp position in sequence or a continous event series inserted along the given note duration. They are appended to note or rest events with additional arguments in the following format:
+Controller-type attribute data are either additional single events inserted together with NoteOn or rest events at the current timestamp position in sequence or continous event series inserted along the given note duration. They are appended to note or rest events with additional arguments in the following format:
 
 `<duration>:<event>_C<Controller#>_<Function>_<Centered>_<Value>_<Value1>`
 
-Controller type data can be one of the following event type specified bythe  `Controller#` number argument:
+Controller type data can be one of the following event types specified by the  `Controller#` number argument:
 
 - 0x0..0x7f: regular (7bit) MIDI controller
 - 0x80..0xff: poly after touch by key
 - 0x100: channel after touch
 - 0x101: NoteOn velocity - no real extra events, but modify existing note-on velocities
 - 0x102: NoteOff velocity - no real extra events, but modify existing note-off velocities
-- 0x103: tempo in % (1.0=>100%) - insert tempo events in track zero
+- 0x103: tempo adjustment in % (1.0=100%) based on initial song tempo setting - makes only sense in track zero
 - 0x104: pitchbend
 - 0x105: program change - makes only sense as single event, but can attach dedicated program changes to individual notes
 - 0x200..0x21f: extended (14 bit) MIDI controller
@@ -288,20 +288,20 @@ Controller type data can be one of the following event type specified bythe  `Co
 The Function argument specifies one of the following data sweep shapes:
 
 - 0: unused
-- 1: linear sweep from Value to Value1 or single event if Value1=Value or if Value1 is not provided
-- 2: full swing sinusoid [0 , 2pi] sweep from Value to Value with amplitude = Value1
-- 3: half swing sinusoid [0 , pi] sweep from Value to Value with amplitude = Value1
+- 1: linear transition sweep from Value to Value1 or single event if Value1=Value or if Value1 is not provided
+- 2: full swing sinusoid [0 , 2pi] sweep from Value to Value with elongation = Value1 (sign determines swing direction)
+- 3: half swing sinusoid [0 , pi] sweep from Value to Value with elongation = Value1 (sign determines swing direction)
 - 4: half sinuoid [-pi/2 , pi/2] transition sweep from Value to Value1
 - 5: sigmoid transition sweep from Value to Value1
 
 > Remark: If the function argument is provided as a negative number, the data sweep will be inverted.
 
-The `Centered` argument determines if the `Value` arguments are provided in centered or uncentered format such as:
+The `Centered` argument determines if the `Value` arguments are provided in centered or uncentered format:
 
-- 0: uncentered - normalized values are provided as [0.0 ... 1.0]
-- 1: centered - normalized values are provided as [-1.0 ... 0.0 ... 1.0]
+- 0: uncentered - normalized values provided as [0.0 ... 1.0]
+- 1: centered - normalized values provided as [-1.0 ... 0.0 ... 1.0]
 
-> The centered format makes sense for centered controller types such as pan, balance, pitch-bend, etc. For other controllers such as volume, expression, etc. it makes more sense to use the uncentered format although there is no restriction for one or the other format.
+> The centered format makes especially sense for centered controller types such as pan, balance, pitch-bend, etc. while other controllers such as volume, expression, etc. make more sense in uncentered format representation - although there is no restriction for one or the other format type.
 
 The following example inserts a MIDI controller 7 (volume) series along the given note.
 
