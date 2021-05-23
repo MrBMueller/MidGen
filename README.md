@@ -115,7 +115,7 @@ Timestamps and event-durations are typically provided in whole note units either
 > ***Note: If there is no timestamp provided, the sequencer automatically applies the latest valid timestamp value.***
 
 #### Duration alignment
-To avoid complex arithmetic equations and to keep sequences more readable, it is possible to align event durations to given timestamp grid boundaries by using the alignment operator `|` in front of the value. This advices the sequencer to proceed in time until the next grid boundary timestamp is reached. So in the example above, the `|1/1:%` event will simply insert a rest in alignment with the next whole note timestamp value. In this case it proceeds to the next bar since the time signature is 4/4 (whole note grid boundary).
+To avoid complex arithmetic equations and to keep sequences more readable, it is possible to align event durations to given timestamp grid boundaries by using the alignment operator `|` in front of the duration value. This advices the sequencer to proceed in time until the next grid boundary timestamp is reached. So in the example above, the `|1/1:%` event will simply insert a rest in alignment with the next whole note timestamp value. In this case it proceeds to the next bar since the time signature is 4/4 (whole note grid boundary).
 
 #### Visual beat/bar separator
 In order to keep the sequence more structured and readable, it is possible to insert additional `|` character symbols to visualize bar, beat or other timestamp separations. Semantically they dont have any meaning and are just ignored like comments or remarks by the sequencer as long as they stay in clear separation from events.
@@ -249,7 +249,7 @@ The next example shows the effect of additional square brackets around the templ
 
 ### additional note attribute data
 
-Each note- or pause-event of the micro sequencer supports additional (optional) attributes such as on/off velocity values and/or attached controller data events or event series. This way you can easily attach additional articulation attributes to each individual note in alignment with note-on and duration timestamps. Note attributes are typically appended to existing event data by undersscore  `_` separations. For example `" 1/4:0_.75_r.25 "` inserts a quarter note with note value 0 (relative to scale and base note), NoteOn velocity 0.75 and release velocity 0.25.
+Each note- or pause-event of the micro sequencer supports additional (optional) attributes such as on/off velocity values and/or attached controller data events or event series. This way you can easily attach additional articulation attributes to each individual note in alignment with note-on and duration timestamps. Note attributes are typically appended by undersscore  `_` separations. For example `" 1/4:0_.75_r.25 "` inserts a quarter note with note value 0 (relative to scale and base note), NoteOn velocity 0.75 and release velocity 0.25.
 
 #### note on velocity
 
@@ -265,11 +265,19 @@ Note-Off velocities are specified by `r<velocity>` floating point values. They a
 
 #### controller-type  attribute data
 
-Controller-type attribute data are either additional single events inserted together with NoteOn or rest events at the current timestamp position in sequence or continous event series inserted along the given note duration. They are appended to note or rest events with additional arguments in the following format:
+Controller-type attribute data are either additional single events inserted together with NoteOn or rest events at the current timestamp position in sequence or continous event series inserted along the given note duration. They are appended to note or rest events with additional arguments by one of the following syntax formats.
 
-`<duration>:<event>_C<Controller#>_<Function>_<Centered>_<Value>_<Value1>`
+Single event controller (e.g. foot, switch, pedals,  etc) are provided by either two or three additional arguments like:
 
-Controller type data can be one of the following event types specified by the  `Controller#` number argument:
+`<duration>:<event>[_C<Controller#>_<Value>]*`
+
+`<duration>:<event>[_C<Controller#>_<Centered>_<Value>]*`
+
+For continous controller data series, the following format is used:
+
+`<duration>:<event>[_C<Controller#>_<Function>_<Centered>_<Value>_<Value1>[_<align>]]*`
+
+Controller type data can be one of the following event types specified by the  `Controller#` argument:
 
 - 0x0..0x7f: regular (7bit) MIDI controller
 - 0x80..0xff: poly after touch by key
@@ -285,29 +293,51 @@ Controller type data can be one of the following event types specified by the  `
 - 0x4000..0x7fff: RPN
 - 0x8000..0xbfff: NRPN
 
-The Function argument specifies one of the following data sweep shapes:
+The `Function` argument specifies one of the following data sweep shapes:
 
 - 0: unused
 - 1: linear transition sweep from Value to Value1 or single event if Value1=Value or if Value1 is not provided
-- 2: full swing sinusoid [0 , 2pi] sweep from Value to Value with elongation = Value1 (sign determines swing direction)
-- 3: half swing sinusoid [0 , pi] sweep from Value to Value with elongation = Value1 (sign determines swing direction)
+- 2: full swing sinusoid [0 , 2pi] sweep from Value to Value with elongation = Value1 (sign determines up/down swing direction)
+- 3: half swing sinusoid [0 , pi] sweep from Value to Value with elongation = Value1 (sign determines up/down swing direction)
 - 4: half sinuoid [-pi/2 , pi/2] transition sweep from Value to Value1
 - 5: sigmoid transition sweep from Value to Value1
 
-> Remark: If the function argument is provided as a negative number, the data sweep will be inverted.
+> Remark: If the function argument is provided as a negative number, the data sweep will be inverted (up<--->down).
 
-The `Centered` argument determines if the `Value` arguments are provided in centered or uncentered format:
+The `Centered` argument determines if the `Value` arguments are provided in centered (signed) or uncentered (unsigned) format:
 
 - 0: uncentered - normalized values provided as [0.0 ... 1.0]
 - 1: centered - normalized values provided as [-1.0 ... 0.0 ... 1.0]
 
 > The centered format makes especially sense for centered controller types such as pan, balance, pitch-bend, etc. while other controllers such as volume, expression, etc. make more sense in uncentered format representation - although there is no restriction for one or the other format type.
 
-The following example inserts a MIDI controller 7 (volume) series along the given note.
+The optional `aligned` argument determines if controller data series get inserted continously (default) or in alignement with Note-On events. This feature can be used to reduce the amount of data in case controller changes are only required when notes get triggered.
+
+Example - switch controller: attach additional sustain pedal press/release events to 1st and last note in sequence
+
+<img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img23.png style="zoom: 80%;"  >
+
+Example - continous controller: sweep MIDI controller 7 (volume) using full swing sinusoid function along the given note
 
 <img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/Example4.png style="zoom:90%;"  >
 
-The following example inserts a MIDI controller 7 (volume) series along the given note.
+Below a few more examples inserting whole note rests along with marker text and midi controller 11 (0xb hex) demonstrating different swing and transition types.
+
+<img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img22.png style="zoom: 80%;"  >
+
+Example: tempo adjustment
+
+<img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img24.png style="zoom: 80%;"  >
+
+### Step-Sequencer (pre-processor)
+
+In general the Micro-Sequencer contains an embedded Step-Sequencer which kicks in if a sequence text string is enclosed within | bar character symbols. In this case the enclosed step sequences get internally converted to micro-sequences before the micro sequencer compiles the smf similar to a pre-processor. Step-sequences are basically text strings were each single character or symbol refers to an individual micro-sequence. Those individual sequences can be either quite simple just containing single notes or more complex containing chords, guitar strums or other pattern types.
+
+A simple use case for step sequencers are typically drum pattern running on a regular time base with one individual instrument (bass drum, snare drum, etc.) per line.
+
+In order to use user defined micro sequences, a lookup table is required.
+
+
 
 ------
 
