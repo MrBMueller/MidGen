@@ -333,11 +333,29 @@ Example: tempo adjustment
 
 In general the Micro-Sequencer contains an embedded Step-Sequencer which kicks in if a sequence text string is enclosed within | bar character symbols. In this case the enclosed step sequences get internally converted to micro-sequences before the micro sequencer compiles the smf similar to a pre-processor. Step-sequences are basically text strings were each single character or symbol refers to an individual micro-sequence. Those individual sequences can be either quite simple just containing single notes or more complex containing chords, guitar strums or other pattern types.
 
-A simple use case for step sequencers are typically drum pattern running on a regular time base with one individual instrument (bass drum, snare drum, etc.) per line.
+A typical use case for step sequences are for instance drum patterns since they usually run on a regular fixed time base with static key->voice assignments. In this case a time base (or step granulyrity resolution) and a note definition is required before the step sequence is applied. This is simply done with a dummy rest event which does not advance in time (see example below).
 
-In order to use user defined micro sequences, a lookup table is required.
+Example: insert few micro-step-sequences with 1/16 resolution across multiple drum voices
 
+<img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img25.png style="zoom: 80%;"  >
 
+Lets take a closer look at the example above: The initial dummy event `1/16>:35_%` is just a rest event without advancing in time, but defines the resolution and the absolute key value based on chromatic scale with basenote=0. The remaining characters are all enclosed within bars very left and very right belonging to the step-sequence.
+
+> Remark: Additional bar | characters within a step sequence are just visual separator symbols for better readability without any semantic meaning. Internally they get removed before parsing the sequence.
+
+By default, the step sequence characters have the following interpretation:
+
+- `.`	- rest
+- `0,1,2,3,4,5,6,7,8,9,X,x` - notes with different velocity values 0%, 10%, 20% .... 100% (X,x)
+- `>` - repeat or stretch the previous note
+- `#` - one semitone up
+- `b` - one semitone down
+
+Another example demonstrating different velocities and stretching notes.
+
+<img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img26.png style="zoom: 80%;"  >
+
+eof
 
 ------
 
