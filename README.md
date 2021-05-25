@@ -76,6 +76,37 @@ Since MidGen has already defined a default smf datastructure handle called `%mai
 
 Make sure that you provide a new filename (smf "track" -1, argument 0), else the original smf will be overwritten.
 
+**track event list view output**
+
+As mentioned, each individual track provides additional event lists within separate text (.txt) files which are written in parallel to the smf output. Those lists might be helpful for debugging or just to get an event overview by track. The following information is organized in individual columns:
+
+-  event timestamp in PPQ ticks (1st level smf hash key)
+- event timestamp in bar:beat:tick
+- ordered event ID (2nd level smf hash key)
+- event data in raw hex representation
+- event data interpretation (type, channel, value, duration, etc.)
+- graphical value representation (ascii bar)
+
+Example track lists:
+
+<img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img28.png width="100%">
+
+**special "track" -1**
+
+As already mentioned, there is one specific "track" (-1) holding generic smf information by 2nd level key values such as:
+
+- -3: smf position pointer - only valid after reading a smf. This field contains the file position after reading the smf. Typically it points to EOF (end of file = file size), however is some cases the file contains more than just smf data which is indicated by smf position < smf size. In this case the pointer can be used to continue reading data from there. For instance the Yamaha style reader makes use of this parameter since the the style CASM sections starts after the smf data block.
+- -2: smf size - only valid after reading a smf. This field can be used in combination with the smf position pointer to determine if there is more than just smf data stored with the file.
+- -1: smf timestamp - only valid after reading a smf
+- 0: smf name
+- 1: smf type (typically type 1 since type 0 gets automatically converted to type 1 if not otherwise specified)
+- 2: number of tracks - only valid after reading a smf for information, else unused
+- 3: PPQ (pulses per quarter note / smf timing resolution)
+- 4: initial tempo
+- 5/6: initial time signature nominator/denominator
+- 7: initial key signature
+- 8: copyright text
+
 **timestamps and durations**
 
 Timestamps and note- or continuous controller-durations for functions such as (insert, micro-sequencer, copy, etc.) are typically provided in whole notes as floating point values to decouple them from timesignatures. Internally all times are stored in ticks based on the smf PPQ setting. Therefore its important to define the required resolution in the beginning of a project.
@@ -325,7 +356,11 @@ Below a few more examples inserting whole note rests along with marker text and 
 
 <img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img22.png style="zoom: 80%;"  >
 
-Example: tempo adjustment
+Example - alignment: Insert 16 x 1/16th notes, go back in time and insert controller 11 (0xb) in alignment with notes, but 1/64th ahead of note events.
+
+<img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img27.png style="zoom: 80%;"  >
+
+Example - tempo adjustment: Insert initial tempo and sweep +/- 25%
 
 <img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img24.png style="zoom: 80%;"  >
 
@@ -333,13 +368,13 @@ Example: tempo adjustment
 
 In general the Micro-Sequencer contains an embedded Step-Sequencer which kicks in if a sequence text string is enclosed within | bar character symbols. In this case the enclosed step sequences get internally converted to micro-sequences before the micro sequencer compiles the smf similar to a pre-processor. Step-sequences are basically text strings were each single character or symbol refers to an individual micro-sequence. Those individual sequences can be either quite simple just containing single notes or more complex containing chords, guitar strums or other pattern types.
 
-A typical use case for step sequences are for instance drum patterns since they usually run on a regular fixed time base with static key->voice assignments. In this case a time base (or step granulyrity resolution) and a note definition is required before the step sequence is applied. This is simply done with a dummy rest event which does not advance in time (see example below).
+A typical use case for step sequences are for instance drum patterns since they usually run on a regular fixed time base with static key->voice assignments. In this case a time base (or step granularity resolution) and a note definition is required before the step sequence is applied. This is simply done with a dummy rest event which does not advance in time (see example below).
 
 Example: insert few micro-step-sequences with 1/16 resolution across multiple drum voices
 
 <img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img25.png style="zoom: 80%;"  >
 
-Lets take a closer look at the example above: The initial dummy event `1/16>:35_%` is just a rest event without advancing in time, but defines the resolution and the absolute key value based on chromatic scale with basenote=0. The remaining characters are all enclosed within bars very left and very right belonging to the step-sequence.
+Lets take a closer look at the example above: The initial dummy event `1/16<:35_%` is just a rest event without advancing in time, but defines the resolution and the absolute key value based on chromatic scale with basenote=0. The remaining characters are all enclosed within bars very left and very right belonging to the step-sequence.
 
 > Remark: Additional bar | characters within a step sequence are just visual separator symbols for better readability without any semantic meaning. Internally they get removed before parsing the sequence.
 
@@ -351,7 +386,7 @@ By default, the step sequence characters have the following interpretation:
 - `#` - one semitone up
 - `b` - one semitone down
 
-Another example demonstrating different velocities and stretching notes.
+Example: demonstrating different velocities and stretching notes.
 
 <img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img26.png style="zoom: 80%;"  >
 
