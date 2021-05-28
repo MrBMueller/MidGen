@@ -38,7 +38,7 @@ The output is typically a type 1 smf midi file saved in your current working dir
 
 ## usage
 
-Once you have perl installed, just run:
+Once you have installed perl, just run:
 
     perl MidGen.pl <project.pl>
 
@@ -51,6 +51,57 @@ Example: read/write a smf midi file:
 <img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img0.png width="100%">
 
 ------
+
+## examples
+
+The easiest way to explore MidGen in order to see how it works and what it can do, is to process some of the example files. Since some of them are made specifically for playsmf containing loops and arpeggios, it would be helpful to play the output smf using this tool.
+
+- MidGenPrj\BalladePourAdeline.pl - simple score showing how the micro-sequencer works
+- MidGen\Projects\ReadSty.pl \<filename.sty\> - converts Yamaha Style files into looped SMF (usable with playsmf)
+- MidGen\Projects\ReadCmf.pl \<filename.cmf\>- converts CMF (Creative Music File) to SMF
+- MidGen\Projects\DancingSliders.pl - shows how continous controller data can be generated
+- MidGen\Projects\PortamentoExample.pl - demonstrates the portamento function
+- MidGenPrj\STYLES\Laeufer_Humanized.pl - piano style arpeggio with timing and velocity randomization
+- MidGenPrj\STYLES\Current51_GuitarStrumEFX.pl - guitar strumming style example w/ Roland EFX effects attached
+- MidGenPrj\STYLES\Current30_SoloMatrix.pl - style example with drum, bass and guitar strumming
+- MidGenPrj\STYLES\Current38_GuitarLive.pl - guitar strumm style example (keys down and up will trigger guitar chords down/up)
+- MidGen\Projects\RolandHp503Test0.pl - demontrates how to use smf phrases (live played parts) and generated styles
+- MidGenPrj\STYLES\Current53_MC.pl -  demonstrates midi clock
+- MidGenPrj\STYLES\Current54_MTC.pl -  demonstrates midi time code
+- MidGenPrj\STYLES\Current55_ChordCheck.pl - simple style pattern with few guitar chords to check all implemented chord types and inversions
+
+
+
+## package/module structure
+
+### top level modules
+
+- MidGen.pl - top level framework entry point
+- MIDI.pm - basic smf input/output module (contains general smf read/write/event functions)
+- MidiDebug.pm - not necessarily required, but contains additional track and event list output functions
+- Edit.pm - contains general smf editor functions such as micro-sequencer, step-sequencer, copy/paste, fade-in/out, portamento, etc.
+
+### Devices
+
+The Devices sub-folder contains mainly device specific packages and modules.
+
+- GM.pm - GM controller definitions including RPN/NRPN and GM reset SysEx function
+- GM2.pm - contains mainly GM2 universal SysEx functions such as MasterVolume, FineTune, Reverb, Chorus and MMC functionality
+- GS.pm - Roland GS functions (mostly SysEx functionality)
+- XG(lite).pm - very few Yamaha XG(lite) definitions
+- MMC.pm - Multimedia control (mostly SysEx transport control functions - moved later into GM2 standard)
+- MG.pm - few MidGen specific definitions
+- SMF.pm - few SMF specific definitions
+- Sync.pm - midiclock and midi time code functions
+  - InsertMC() - insert midi clock event series using escape sequence events
+  - InsertMTC() - insert midi timing clock event series using escape sequence events
+- playsmf.pm - definitions and functions specifically for playsmf midi player/looper/arpeggiator
+  - OverrideCmdLineArgs() - override command line arguments using sequencer specific meta events
+  - PreProc() - event pre-processor especially for jump on jump and zero shot sequence preparation (dummy event insertion)
+
+### Sequences
+
+This sub-folder was originally meant to store a sequence library for musical pattern like bass lines, drum pattern, styles, etc., however it evolved over time to a library of tools, helper functions and other miscellaneous perl packages.
 
 ## internal smf data structure
 
