@@ -441,6 +441,20 @@ Example: demonstrating different velocities and stretching notes.
 
 <img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img26.png style="zoom: 80%;"  >
 
+## portamento
+
+The Edit::Portamento() function emulates portamento functionality by collapsing monotonic melody tracks into single note pitch tracks with fixed keys while the pitches are provided by pitch bend events.
+
+`<Pitch-Bend-Sensitivity> = Edit::Portamento(<smf-hash-pointer>, <track>, <portamento-time>);`
+
+- `<smf-hash-pointer>` - smf hash pointer handle
+- `<track>` - selected track
+- `<portamento-time>` - gliding time
+
+The function returns the required pitch bend sensitivity which must be inserted in the very beginning of the track, else the sequence will sound off.
+
+<img src=https://raw.githubusercontent.com/MrBMueller/MidGen/master/img/img29.png style="zoom: 80%;"  >
+
 eof
 
 ------
