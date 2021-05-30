@@ -77,9 +77,18 @@ The easiest way to explore MidGen in order to see how it works and what it can d
 ### top level modules
 
 - MidGen.pl - top level framework entry point
-- MIDI.pm - basic smf input/output module (contains general smf read/write/event functions)
+- MIDI.pm - basic smf input/output module (contains general smf read/write and event-insert functions)
 - MidiDebug.pm - not necessarily required, but contains additional track and event list output functions
-- Edit.pm - contains general smf editor functions such as micro-sequencer, step-sequencer, copy/paste, fade-in/out, portamento, etc.
+- Edit.pm - contains general smf editor functions such as
+  - micro-sequencer
+  - step-sequencer
+  - copy/paste tracks, regions, etc.
+  - quantize tracks (note timestamps, durations)
+  - fade-in/out single tracks or entire songs
+  - portamento
+  - randomize (humanize) timestamps, durations, note on/off velocities
+
+and much more.
 
 ### Devices
 
